@@ -2,8 +2,13 @@
 
 import React, { useState } from 'react';
 import { Button } from './Button';
+import Cookies from 'js-cookie';
 
-export function WaitlistForm() {
+interface WaitlistFormProps {
+  onSlotDecrement?: (newSlots: number) => void;
+}
+
+export function WaitlistForm({ onSlotDecrement }: WaitlistFormProps = {}) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,14 +33,26 @@ export function WaitlistForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      
+
       const result = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(result.error || 'Something went wrong');
       }
 
       setSuccess(true);
+
+      const existingCookie = Cookies.get('resevia_slots');
+      if (existingCookie) {
+        let current = parseInt(existingCookie, 10);
+        if (!isNaN(current)) {
+          const newVal = Math.max(0, current - 1);
+          Cookies.set('resevia_slots', newVal.toString(), { expires: 365 });
+          if (onSlotDecrement) {
+            onSlotDecrement(newVal);
+          }
+        }
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -57,10 +74,10 @@ export function WaitlistForm() {
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto text-left">
       <div>
         <label htmlFor="first_name" className="block text-sm font-medium text-brand-black mb-1">First Name *</label>
-        <input 
-          type="text" 
-          id="first_name" 
-          name="first_name" 
+        <input
+          type="text"
+          id="first_name"
+          name="first_name"
           required
           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple"
           placeholder="First Name"
@@ -68,10 +85,10 @@ export function WaitlistForm() {
       </div>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-brand-black mb-1">Email Address *</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
+        <input
+          type="email"
+          id="email"
+          name="email"
           required
           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple"
           placeholder="hello@example.com"
@@ -79,9 +96,9 @@ export function WaitlistForm() {
       </div>
       <div>
         <label htmlFor="industry" className="block text-sm font-medium text-brand-black mb-1">Your Industry *</label>
-        <select 
-          id="industry" 
-          name="industry" 
+        <select
+          id="industry"
+          name="industry"
           required
           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple bg-white"
         >
@@ -96,9 +113,9 @@ export function WaitlistForm() {
       </div>
       <div>
         <label htmlFor="appointments_per_week" className="block text-sm font-medium text-brand-black mb-1">Appointments per week *</label>
-        <select 
-          id="appointments_per_week" 
-          name="appointments_per_week" 
+        <select
+          id="appointments_per_week"
+          name="appointments_per_week"
           required
           className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple bg-white"
         >
@@ -109,9 +126,9 @@ export function WaitlistForm() {
           <option value="300+">300+</option>
         </select>
       </div>
-      
+
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-      
+
       <Button type="submit" className="w-full" size="lg" disabled={loading}>
         {loading ? 'Submitting...' : 'Secure My Spot'}
       </Button>

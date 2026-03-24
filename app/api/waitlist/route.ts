@@ -80,10 +80,9 @@ export async function POST(request: Request) {
                     <td
                       style="background-color: #F9F8FF; border: 1px solid #E5E7EB; border-left: 4px solid #6D28D9; padding: 20px; border-radius: 6px;"
                     >
-                      <p style="margin: 0; color: #1C1917; font-weight: 500;">🎁 Early Access Perk</p>
+                      <p style="margin: 0; color: #1C1917; font-weight: 500;">🎁 Founding Member Perks</p>
                       <p style="margin: 8px 0 0 0; font-size: 14px;">
-                        As a waitlist member, you've secured a <strong>30% discount</strong> on your first 3 months once
-                        we launch.
+                        As one of our first 50 members, you've secured <strong>free setup (worth £499)</strong> and your <strong>first month free</strong>.
                       </p>
                     </td>
                   </tr>

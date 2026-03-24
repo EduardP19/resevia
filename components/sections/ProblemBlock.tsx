@@ -21,28 +21,37 @@ export function ProblemBlock() {
             You're with a client. Your phone rings. You can't answer. By the time you call back — they've already booked somewhere else. The average UK salon loses 10–20% of revenue every week to missed calls and no-shows. That's a full day's work, gone.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
           {problems.map((prob, i) => (
-             <motion.div 
-               key={i}
-               initial={{ opacity: 0, y: 20 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               transition={{ delay: i * 0.1, duration: 0.5 }}
-             >
-               <Card className="h-full text-center">
-                 <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                 </div>
-                 <h3 className="font-semibold text-brand-black text-lg mb-2">{prob.title}</h3>
-                 <p className="text-brand-purple font-medium">{prob.description}</p>
-               </Card>
-             </motion.div>
+            <motion.div
+              key={i}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+            >
+              <Card className="h-full text-center">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-brand-black text-lg mb-2">{prob.title}</h3>
+                <p className="text-brand-purple font-medium">{prob.description}</p>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

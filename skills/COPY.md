@@ -116,7 +116,7 @@ Supporting: No spam. No credit card. Just early access.
 Tagline: Your AI receptionist. Always ready.
 Links: How It Works · Industries · Pricing · Contact
 Legal: Privacy Policy · Terms of Service
-© 2025 Resevia. All rights reserved.
+© 2026 Resevia. All rights reserved.
 
 ---
 

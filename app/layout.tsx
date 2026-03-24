@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display } from "next/font/google";
+import { ClarityInit } from "@/components/analytics/ClarityInit";
 import "./globals.css";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-sans' });
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} ${playfair.variable} font-sans text-brand-gray bg-white antialiased`}>
         {children}
+        <ClarityInit />
       </body>
     </html>
   );

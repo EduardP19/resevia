@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
+import { SlotCounter } from '@/components/ui/SlotCounter';
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,20 +26,20 @@ export function Hero() {
         mouseY.set(e.clientY - rect.top);
       }
     };
-    
+
     // Set initial position to center
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       mouseX.set(rect.width / 2);
       mouseY.set(rect.height / 2);
     }
-    
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative bg-[#0c0a1d] pt-32 pb-24 overflow-hidden"
     >
@@ -47,9 +48,26 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 z-0"
         style={{ background }}
       />
-      
-      {/* Subtle overlay to enhance the premium tech feel */}
-      <div className="absolute inset-0 z-0 opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-purple/20 via-transparent to-transparent" />
+
+      {/* Animated Mesh Gradient Blobs */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            x: ["0%", "5%", "-5%", "0%"],
+            y: ["0%", "-5%", "5%", "0%"],
+          }}
+          transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
+          className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-[#6D28D9] opacity-[0.05] blur-[120px]"
+        />
+        <motion.div
+          animate={{
+            x: ["0%", "-5%", "5%", "0%"],
+            y: ["0%", "5%", "-5%", "0%"],
+          }}
+          transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, repeatType: "mirror", delay: 1 }}
+          className="absolute top-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-[#C9A96E] opacity-[0.05] blur-[120px]"
+        />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -75,22 +93,30 @@ export function Hero() {
           <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
             Resevia answers calls, books appointments and handles enquiries 24/7 — so you can focus on your clients, not your phone.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 items-center mb-20">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 items-center mb-8">
             <Link href="/waitlist">
               <Button size="lg" className="bg-brand-gold text-brand-black hover:bg-yellow-400 focus:ring-yellow-400 border-none shadow-[0_0_30px_rgba(201,169,110,0.3)]">
                 Join the Waitlist — It's Free
               </Button>
             </Link>
           </div>
-          
+
+          <div className="mb-20">
+            <SlotCounter theme="dark" />
+          </div>
+
           {/* Trust Elements / Integrations */}
           <div className="border-t border-white/10 pt-10 mt-8 max-w-4xl mx-auto">
-            <p className="text-xs text-gray-400 uppercase tracking-widest mb-8 font-semibold">Integrates seamlessly with your current tools</p>
-            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-              <span className="text-white font-display font-bold text-2xl tracking-tight">Fresha</span>
-              <span className="text-white font-display font-bold text-2xl tracking-tight">Treatwell</span>
-              <span className="text-white font-display font-bold text-2xl tracking-tight">Timely</span>
-              <span className="text-white font-display font-bold text-2xl tracking-tight">Phorest</span>
+            <p className="text-xs text-brand-gray uppercase tracking-widest mb-6 font-semibold">Integrates seamlessly with your current tools</p>
+            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
+              {["Fresha", "Treatwell", "Timely", "Phorest"].map((tool) => (
+                <div key={tool} className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-[rgba(201,169,110,0.2)] bg-white/70 backdrop-blur-md shadow-sm transition-transform hover:-translate-y-1">
+                  <svg className="w-5 h-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-brand-black font-display font-semibold text-lg">{tool}</span>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
