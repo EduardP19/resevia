@@ -34,7 +34,7 @@ export function Logo({ className = '', theme = 'light' }: { className?: string, 
                 rotate: [rotate, rotate + 360],
               }}
               transition={{
-                duration: 30,
+                duration: 15,
                 repeat: Infinity,
                 ease: "linear"
               }}

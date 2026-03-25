@@ -11,6 +11,9 @@ export function Hero() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
+  // Generate a random initial rotation for the logo
+  const initialRotate = useRef(Math.random() * 360).current;
+
   // Smooth out the mouse movements
   const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
@@ -45,10 +48,18 @@ export function Hero() {
     >
       {/* Background Logo Watermark */}
       <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.12] pointer-events-none">
-        <img 
+        <motion.img 
           src="/logo.svg" 
           alt="" 
-          className="w-[1000px] h-[1000px] object-contain rotate-12"
+          className="w-[1000px] h-[1000px] object-contain"
+          animate={{
+            rotate: [initialRotate, initialRotate + 360],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
         />
       </div>
 
