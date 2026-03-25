@@ -43,31 +43,19 @@ export function Hero() {
       ref={containerRef}
       className="relative bg-[#0c0a1d] pt-32 pb-24 overflow-hidden"
     >
-      {/* Interactive Spotlight Background */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ background }}
-      />
-
-      {/* Animated Mesh Gradient Blobs */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            x: ["0%", "5%", "-5%", "0%"],
-            y: ["0%", "-5%", "5%", "0%"],
-          }}
-          transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
-          className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-[#6D28D9] opacity-[0.05] blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            x: ["0%", "-5%", "5%", "0%"],
-            y: ["0%", "5%", "-5%", "0%"],
-          }}
-          transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, repeatType: "mirror", delay: 1 }}
-          className="absolute top-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-[#C9A96E] opacity-[0.05] blur-[120px]"
+      {/* Background Logo Watermark */}
+      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+        <img 
+          src="/logo.svg" 
+          alt="" 
+          className="w-[800px] h-[800px] object-contain rotate-12"
         />
       </div>
+
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{ background }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div

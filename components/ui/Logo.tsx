@@ -27,35 +27,33 @@ export function Logo({ className = '', theme = 'light' }: { className?: string, 
               cx="50" cy="50" rx="35" ry="15"
               fill="none"
               stroke="url(#logo-gradient)"
-              strokeWidth="1.5"
+              strokeWidth="1.2"
               initial={{ rotate }}
               style={{ originX: 0.5, originY: 0.5 }}
               animate={{
                 rotate: [rotate, rotate + 360],
               }}
               transition={{
-                duration: 20,
+                duration: 30,
                 repeat: Infinity,
                 ease: "linear"
               }}
             />
           ))}
           
-          {/* Inner details to match the complexity */}
-          {[30, 90, 150, 210, 270, 330].map((rotate, i) => (
-            <motion.ellipse
-              key={`inner-${i}`}
-              cx="50" cy="50" rx="20" ry="8"
-              fill="none"
-              stroke="url(#logo-gradient)"
-              strokeWidth="1"
-              opacity={0.6}
-              initial={{ rotate }}
-              style={{ originX: "50px", originY: "50px" }}
+          {/* Central Human Silhouette (Head and Shoulders) */}
+          <g transform="translate(50, 52)">
+            {/* Head */}
+            <circle 
+              cx="0" cy="-10" r="6" 
+              fill="url(#logo-gradient)" 
             />
-          ))}
-          
-          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#logo-gradient)" strokeWidth="0.5" opacity={0.3} />
+            {/* Shoulders/Body */}
+            <path 
+              d="M -12 8 C -12 0, 12 0, 12 8 L 12 12 L -12 12 Z" 
+              fill="url(#logo-gradient)" 
+            />
+          </g>
         </svg>
       </div>
 
