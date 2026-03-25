@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter } from "next/font/google";
+import { Suspense } from "react";
 import Script from 'next/script';
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
@@ -48,6 +50,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
       </head>
       <body className={`${inter.variable} ${montserrat.variable} font-sans text-brand-gray bg-white antialiased`}>
         {children}

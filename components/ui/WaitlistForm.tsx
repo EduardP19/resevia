@@ -42,6 +42,11 @@ export function WaitlistForm({ onSlotDecrement }: WaitlistFormProps = {}) {
 
       setSuccess(true);
 
+      // Trigger Meta Pixel "Lead" event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead');
+      }
+
       const existingCookie = Cookies.get('resevia_slots');
       if (existingCookie) {
         let current = parseInt(existingCookie, 10);
