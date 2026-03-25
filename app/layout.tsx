@@ -3,6 +3,7 @@ import { Montserrat, Inter } from "next/font/google";
 import { Suspense } from "react";
 import Script from 'next/script';
 import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
@@ -55,7 +56,11 @@ export default function RootLayout({
         </Suspense>
       </head>
       <body className={`${inter.variable} ${montserrat.variable} font-sans text-brand-gray bg-white antialiased`}>
-        {children}
+        <Suspense fallback={null}>
+          <AnalyticsProvider>
+            {children}
+          </AnalyticsProvider>
+        </Suspense>
       </body>
       <Script id="microsoft-clarity" strategy="afterInteractive">
         {`
