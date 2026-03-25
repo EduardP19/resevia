@@ -44,11 +44,11 @@ export function Hero() {
       className="relative bg-[#0c0a1d] pt-32 pb-24 overflow-hidden"
     >
       {/* Background Logo Watermark */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.12] pointer-events-none">
         <img 
           src="/logo.svg" 
           alt="" 
-          className="w-[800px] h-[800px] object-contain rotate-12"
+          className="w-[1000px] h-[1000px] object-contain rotate-12"
         />
       </div>
 
