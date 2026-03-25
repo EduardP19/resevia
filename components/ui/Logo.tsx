@@ -1,25 +1,74 @@
-import React from 'react';
+'use client';
 
-export function Logo({ className = '' }: { className?: string }) {
+import React from 'react';
+import { motion } from 'framer-motion';
+
+export function Logo({ className = '', theme = 'light' }: { className?: string, theme?: 'light' | 'dark' }) {
+  const isDark = theme === 'dark';
+  const textColor = isDark ? 'text-white' : 'text-brand-black';
+  const subtitleColor = '#C9A96E'; // Gold color for subtitle
+
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 overflow-visible">
-        {/* Purple Dot */}
-        <circle cx="8" cy="34" r="4.5" fill="#6D28D9" />
+      {/* Intricate Geometric Icon */}
+      <div className="relative w-12 h-12 flex-shrink-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full">
+          <defs>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#6D28D9" />
+              <stop offset="100%" stopColor="#C9A96E" />
+            </linearGradient>
+          </defs>
+          
+          {/* Spirograph Pattern - 6 Overlapping ellipses */}
+          {[0, 60, 120, 180, 240, 300].map((rotate, i) => (
+            <motion.ellipse
+              key={i}
+              cx="50" cy="50" rx="35" ry="15"
+              fill="none"
+              stroke="url(#logo-gradient)"
+              strokeWidth="1.5"
+              initial={{ rotate }}
+              style={{ originX: 0.5, originY: 0.5 }}
+              animate={{
+                rotate: [rotate, rotate + 360],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          ))}
+          
+          {/* Inner details to match the complexity */}
+          {[30, 90, 150, 210, 270, 330].map((rotate, i) => (
+            <motion.ellipse
+              key={`inner-${i}`}
+              cx="50" cy="50" rx="20" ry="8"
+              fill="none"
+              stroke="url(#logo-gradient)"
+              strokeWidth="1"
+              opacity={0.6}
+              initial={{ rotate }}
+              style={{ originX: "50px", originY: "50px" }}
+            />
+          ))}
+          
+          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#logo-gradient)" strokeWidth="0.5" opacity={0.3} />
+        </svg>
+      </div>
 
-        {/* Inner Gold Swoop */}
-        <path d="M 12 29 C 14 22, 20 18, 26 18" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" />
-
-        {/* Middle Gold Swoop */}
-        <path d="M 9 24 C 12 12, 24 8, 36 10" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" />
-
-        {/* Outer Gold Swoop */}
-        <path d="M 6 19 C 10 0, 30 -2, 44 4" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" />
-      </svg>
-
-      <div className="flex flex-col justify-center translate-y-[2px]">
-        <span className="font-display font-bold text-[28px] leading-[1] text-[#1C1917] tracking-tight">Resevia</span>
-        <span className="text-[9.5px] font-bold text-[#C9A96E] tracking-[0.25em] mt-[3px] leading-none uppercase">Your AI Receptionist</span>
+      <div className="flex flex-col justify-center">
+        <span className={`text-2xl font-bold font-display leading-tight ${textColor} tracking-tight`}>
+          Resevia
+        </span>
+        <span 
+          className="text-[8px] font-bold tracking-[0.25em] uppercase leading-none"
+          style={{ color: subtitleColor }}
+        >
+          Your AI Receptionist
+        </span>
       </div>
     </div>
   );

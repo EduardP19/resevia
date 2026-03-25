@@ -19,7 +19,7 @@
 - Body Text: #6B7280
 
 ## Typography
-- Headings: Syne Bold (Google Fonts)
+- Headings: Montserrat (Google Fonts)
 - Body: Inter (Google Fonts)
 
 ## Tailwind Config
@@ -33,7 +33,7 @@ extend.colors.brand:
 
 extend.fontFamily:
   sans: ['Inter', 'sans-serif']
-  display: ['Syne', 'sans-serif']
+  display: ['Montserrat', 'sans-serif']
 
 ## Folder Structure
 app/

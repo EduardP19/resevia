@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Montserrat, Playfair_Display } from "next/font/google";
-import { ClarityInit } from "@/components/analytics/ClarityInit";
+import { Montserrat, Inter } from "next/font/google";
+import Script from 'next/script';
 import "./globals.css";
 
-const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-sans' });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-display' });
+const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-display' });
 
 export const metadata: Metadata = {
   title: "Resevia — Your AI Receptionist",
@@ -16,12 +16,51 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://resevia.co.uk/#organization",
+        "name": "Resevia",
+        "url": "https://resevia.co.uk",
+        "description": "Your AI receptionist. Always ready. Resevia handles calls, bookings and enquiries 24/7."
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://resevia.co.uk/#software",
+        "name": "Resevia AI Receptionist",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "79.00",
+          "priceCurrency": "GBP"
+        }
+      }
+    ]
+  };
+
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${playfair.variable} font-sans text-brand-gray bg-white antialiased`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className={`${inter.variable} ${montserrat.variable} font-sans text-brand-gray bg-white antialiased`}>
         {children}
-        <ClarityInit />
       </body>
+      <Script id="microsoft-clarity" strategy="afterInteractive">
+        {`
+          (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "w0dh1pomxp");
+        `}
+      </Script>
     </html>
   );
 }
