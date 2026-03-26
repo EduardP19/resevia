@@ -47,7 +47,7 @@ export function Navbar() {
 
           <div className="flex items-center">
             <Link href="/waitlist">
-              <Button size="md">Join the Waitlist</Button>
+              <Button size="md">Secure My Offer</Button>
             </Link>
           </div>
         </div>

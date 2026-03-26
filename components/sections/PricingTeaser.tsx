@@ -181,8 +181,9 @@ export function PricingTeaser() {
             );
           })}
         </div>
-        <div className="text-center">
-          <p className="text-brand-black font-medium mb-4">Founding member offer: First 50 businesses get free setup (worth £499) + first month free on any plan.</p>
+        <div className="text-center bg-brand-gold/10 border border-brand-gold/30 p-8 rounded-2xl max-w-4xl mx-auto backdrop-blur-sm shadow-inner">
+          <Badge className="bg-brand-gold text-brand-black mb-4 px-4 py-1.5 font-bold animate-bounce">LIMITED TIME: GOLDEN OFFER</Badge>
+          <p className="text-brand-black font-display font-bold text-xl mb-4">First 50 businesses get free setup (worth £499) + first month free on any plan.</p>
           <SlotCounter />
         </div>
       </div>

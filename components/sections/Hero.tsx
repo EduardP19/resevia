@@ -48,9 +48,9 @@ export function Hero() {
     >
       {/* Background Logo Watermark */}
       <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.12] pointer-events-none">
-        <motion.img 
-          src="/logo.svg" 
-          alt="" 
+        <motion.img
+          src="/logo.svg"
+          alt=""
           className="w-[1000px] h-[1000px] object-contain"
           animate={{
             rotate: [initialRotate, initialRotate + 360],
@@ -80,7 +80,7 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
             </span>
-            Trusted by 200+ clinics & salons in the UK
+            Trusted by 200+ salons & clinics in the UK
           </div>
 
           <h1 className="text-5xl md:text-7xl font-display font-bold text-white mb-6 tracking-tight leading-tight">
@@ -92,13 +92,16 @@ export function Hero() {
           <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
             Resevia answers calls, books appointments and handles enquiries 24/7 — so you can focus on your clients, not your phone.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 items-center mb-4">
             <Link href="/waitlist">
               <Button size="lg" className="bg-brand-gold text-brand-black hover:bg-yellow-400 focus:ring-yellow-400 border-none shadow-[0_0_30px_rgba(201,169,110,0.3)]">
-                Join the Waitlist — It's Free
+                Join the Waitlist — Get First Month Free
               </Button>
             </Link>
           </div>
+          <p className="text-brand-gold font-medium text-sm mb-8 animate-pulse">
+            🎁 GOLDEN OFFER: £0 Setup Fee + First Month Free for the first 50 signups
+          </p>
 
           <div className="mb-20">
             <SlotCounter theme="dark" />

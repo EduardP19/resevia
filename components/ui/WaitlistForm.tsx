@@ -67,10 +67,21 @@ export function WaitlistForm({ onSlotDecrement }: WaitlistFormProps = {}) {
 
   if (success) {
     return (
-      <div className="bg-brand-light p-6 rounded-xl border border-green-200 text-center">
-        <h3 className="text-xl font-display font-semibold text-brand-black mb-2">You're on the list.</h3>
-        <p className="text-brand-gray mb-4">We'll be in touch with your early access details.</p>
-        <p className="text-sm">Follow us on Instagram for updates.</p>
+      <div className="bg-brand-purple/5 p-8 rounded-2xl border border-brand-purple/20 text-center shadow-lg">
+        <div className="w-16 h-16 bg-brand-gold rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(201,169,110,0.5)]">
+          <svg className="w-8 h-8 text-brand-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-display font-bold text-brand-black mb-3">You're on the list!</h3>
+        <p className="text-lg text-brand-purple font-semibold mb-4">✨ Golden Offer Secured ✨</p>
+        <p className="text-brand-gray mb-6 leading-relaxed">
+          We've reserved your spot for <strong>£0 Setup + First Month Free</strong>. We'll be in touch soon with your early access details.
+        </p>
+        <div className="pt-6 border-t border-brand-purple/10">
+          <p className="text-sm text-brand-gray font-medium">Follow us for updates:</p>
+          <p className="text-brand-purple font-bold mt-1">@resevia.ai</p>
+        </div>
       </div>
     );
   }
