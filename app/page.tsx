@@ -2,7 +2,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { ProblemBlock } from '@/components/sections/ProblemBlock';
-import { SolutionBlock } from '@/components/sections/SolutionBlock';
+import { EnchanteeBlock } from '@/components/sections/EnchanteeBlock';
 import { HowItWorks } from '@/components/sections/HowItWorks';
 import { Industries } from '@/components/sections/Industries';
 import { SocialProof } from '@/components/sections/SocialProof';
@@ -17,7 +17,7 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <ProblemBlock />
-        <SolutionBlock />
+        <EnchanteeBlock />
         <HowItWorks />
         <Industries />
         <SocialProof />

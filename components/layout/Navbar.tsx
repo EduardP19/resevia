@@ -29,7 +29,9 @@ export function Navbar() {
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <Link href="/" className="flex items-center transition-opacity hover:opacity-90">
-              <Logo />
+              <div className="origin-left scale-[0.82] sm:scale-100">
+                <Logo />
+              </div>
             </Link>
           </div>
 
@@ -45,9 +47,35 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="flex items-center">
-            <Link href="/waitlist">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href="https://app.resevia/test-ui"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex"
+            >
+              <Button size="md" variant="secondary" logClick={false}>
+                Test Agent
+              </Button>
+            </a>
+
+            <a
+              href="https://app.resevia/test-ui"
+              target="_blank"
+              rel="noreferrer"
+              className="sm:hidden"
+            >
+              <Button size="sm" variant="secondary" logClick={false}>
+                Test
+              </Button>
+            </a>
+
+            <Link href="/waitlist" className="hidden sm:inline-flex">
               <Button size="md">Secure My Offer</Button>
+            </Link>
+
+            <Link href="/waitlist" className="sm:hidden">
+              <Button size="sm">Offer</Button>
             </Link>
           </div>
         </div>
