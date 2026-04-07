@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { appTestUrl } from "@/lib/app-links";
 
 function IconCheck() {
   return (
@@ -60,7 +61,7 @@ export function EnchanteeBlock() {
           </ul>
 
           <div className="mt-10">
-            <a href="https://app.resevia.co.uk/test-ui" target="_blank" rel="noreferrer">
+            <a href={appTestUrl} target="_blank" rel="noreferrer">
               <Button
                 size="lg"
                 className="bg-brand-gold text-brand-black hover:bg-yellow-400 focus:ring-yellow-400 border-none shadow-[0_0_30px_rgba(201,169,110,0.24)]"

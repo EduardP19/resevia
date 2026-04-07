@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { Logo } from '@/components/ui/Logo';
+import { appTestUrl } from '@/lib/app-links';
 
 export function Navbar() {
   const { scrollY } = useScroll();
@@ -49,7 +50,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <a
-              href="https://app.resevia/test-ui"
+              href={appTestUrl}
               target="_blank"
               rel="noreferrer"
               className="hidden sm:inline-flex"
@@ -60,7 +61,7 @@ export function Navbar() {
             </a>
 
             <a
-              href="https://app.resevia/test-ui"
+              href={appTestUrl}
               target="_blank"
               rel="noreferrer"
               className="sm:hidden"

@@ -1,0 +1,6 @@
+{
+  "name": "@resevia/agent",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Future home of the Resevia agent runtime and internal app dependencies."
+}
