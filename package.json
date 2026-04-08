@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace @resevia/web",
-    "build": "npm run build --workspace @resevia/web",
+    "build": "npm run build --workspace @resevia/web && rm -rf .next && cp -R apps/web/.next .next",
     "start": "npm run start --workspace @resevia/web",
     "lint": "npm run lint --workspace @resevia/web",
     "dev:web": "npm run dev --workspace @resevia/web",
