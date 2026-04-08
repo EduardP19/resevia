@@ -49,7 +49,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <a
-              href="https://app.resevia/test-ui"
+              href="https://app.resevia.co.uk/sophia-sandbox"
               target="_blank"
               rel="noreferrer"
               className="hidden sm:inline-flex"
@@ -60,7 +60,7 @@ export function Navbar() {
             </a>
 
             <a
-              href="https://app.resevia/test-ui"
+              href="https://app.resevia.co.uk/sophia-sandbox"
               target="_blank"
               rel="noreferrer"
               className="sm:hidden"
