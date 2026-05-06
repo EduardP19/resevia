@@ -248,7 +248,7 @@ export async function listPosts(): Promise<DashboardPost[]> {
   return list
     .map(normalizePost)
     .filter(
-      (post) =>
+      (post: DashboardPost) =>
         Boolean(post.id) &&
         (!post.integrationId || post.integrationId === integrationId)
     )

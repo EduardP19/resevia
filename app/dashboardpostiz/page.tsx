@@ -455,6 +455,7 @@ export default function DashboardPostizPage() {
                         className="overflow-hidden rounded-md border border-slate-200"
                       >
                         {isImageUrl(url) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img src={url} alt="Attachment preview" className="h-44 w-full object-cover" />
                         ) : isVideoUrl(url) ? (
                           <video src={url} controls className="h-44 w-full bg-slate-100 object-cover" />
