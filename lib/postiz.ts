@@ -252,7 +252,7 @@ export async function listPosts(): Promise<DashboardPost[]> {
         Boolean(post.id) &&
         (!post.integrationId || post.integrationId === integrationId)
     )
-    .map((post) => {
+    .map((post: DashboardPost) => {
       const meta = post.integrationId ? integrationMap.get(post.integrationId) : undefined;
       return {
         ...post,
