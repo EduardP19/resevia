@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 
 type PostItem = {
   id: string;
@@ -11,6 +11,8 @@ type PostItem = {
   integrationName?: string;
   integrationIdentifier?: string;
   status?: string;
+  hasError?: boolean;
+  errorMessage?: string;
   createdAt?: string;
   scheduledAt?: string;
 };
@@ -20,6 +22,7 @@ type FormState = {
   attachments: string;
   hashtags: string;
   contentType: "post" | "reel" | "video";
+  comment: string;
   scheduleDate: string;
   scheduleHour: string;
   scheduleMinute: string;
@@ -30,6 +33,7 @@ const emptyForm: FormState = {
   attachments: "",
   hashtags: "",
   contentType: "post",
+  comment: "",
   scheduleDate: "",
   scheduleHour: "09",
   scheduleMinute: "00",
@@ -101,6 +105,56 @@ function pageLabel(post: PostItem) {
   return platform ? `${platform} ${name}` : name;
 }
 
+function pageIcon(post: PostItem): ReactNode {
+  const identifier = (post.integrationIdentifier || "").toLowerCase();
+  if (identifier.includes("facebook")) {
+    return (
+      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#1877F2] text-white">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
+          <path d="M13.5 8.5V6.8c0-.7.4-.8.7-.8h1.7V3.1h-2.4c-2.8 0-3.4 2.1-3.4 3.5v1.9H8v2.9h2.1V21h3.4v-9.6h2.2l.3-2.9h-2.5Z" />
+        </svg>
+      </span>
+    );
+  }
+  if (identifier.includes("instagram")) {
+    return (
+      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#515bd4] text-white">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth="2" aria-hidden="true">
+          <rect x="4.5" y="4.5" width="15" height="15" rx="4" />
+          <circle cx="12" cy="12" r="3.5" />
+          <circle cx="17.2" cy="6.8" r="1" className="fill-current stroke-none" />
+        </svg>
+      </span>
+    );
+  }
+  if (identifier.includes("tiktok")) {
+    return (
+      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
+          <path d="M15.9 5.1c.7 1.1 1.8 1.8 3.1 2v2.4a6.6 6.6 0 0 1-3.2-1v5.3a4.8 4.8 0 1 1-4.8-4.8c.3 0 .6 0 .9.1v2.5a2.4 2.4 0 1 0 1.5 2.2V3h2.5v2.1Z" />
+        </svg>
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-slate-700">
+      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
+        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 9h-3.1a16 16 0 0 0-1.1-5A8.1 8.1 0 0 1 18.9 11ZM12 4.1c.8 1.1 1.5 3 1.8 5.1h-3.6c.3-2.1 1-4 1.8-5.1ZM4 13h3.1c.1 1.8.5 3.5 1.1 5A8.1 8.1 0 0 1 4 13Zm3.1-2H4a8.1 8.1 0 0 1 4.2-5 16 16 0 0 0-1.1 5Zm2 0c.1-1.8.5-3.4 1-4.8.6-.2 1.2-.3 1.9-.3s1.3.1 1.9.3c.5 1.4.9 3 1 4.8H9.1Zm0 2h5.8c-.1 1.8-.5 3.4-1 4.8-.6.2-1.2.3-1.9.3s-1.3-.1-1.9-.3c-.5-1.4-.9-3-1-4.8Zm5.6 5a16 16 0 0 0 1.1-5h3.1a8.1 8.1 0 0 1-4.2 5ZM12 19.9c-.8-1.1-1.5-3-1.8-5.1h3.6c-.3 2.1-1 4-1.8 5.1Z" />
+      </svg>
+    </span>
+  );
+}
+
+function isPostError(post: PostItem) {
+  if (post.hasError) return true;
+  const status = (post.status || "").toUpperCase();
+  return (
+    status.includes("ERROR") ||
+    status.includes("FAILED") ||
+    status.includes("REJECTED")
+  );
+}
+
 export default function DashboardPostizPage() {
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +162,17 @@ export default function DashboardPostizPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<{
+    facebook: boolean;
+    instagram: boolean;
+    tiktok: boolean;
+  }>({
+    facebook: true,
+    instagram: false,
+    tiktok: false,
+  });
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [openPosts, setOpenPosts] = useState<Record<string, boolean>>({});
 
   const title = useMemo(
     () => (editingId ? "Edit Post" : "Create New Post"),
@@ -161,13 +225,29 @@ export default function DashboardPostizPage() {
       attachments: post.attachments.join("\n"),
       hashtags: post.hashtags.join(" "),
       contentType: post.contentType ?? "post",
+      comment: "",
       ...scheduleParts,
+    });
+    const provider = (post.integrationIdentifier || "").toLowerCase();
+    setSelectedPlatforms({
+      facebook: provider.includes("facebook"),
+      instagram: provider.includes("instagram"),
+      tiktok: provider.includes("tiktok"),
     });
   }
 
   function resetForm() {
     setEditingId(null);
     setForm(emptyForm);
+    setSelectedPlatforms({
+      facebook: true,
+      instagram: false,
+      tiktok: false,
+    });
+  }
+
+  function togglePostOpen(id: string) {
+    setOpenPosts((prev) => ({ ...prev, [id]: !prev[id] }));
   }
 
   async function onSubmit(event: FormEvent) {
@@ -181,6 +261,16 @@ export default function DashboardPostizPage() {
         ? `/api/dashboardpostiz/posts/${editingId}`
         : "/api/dashboardpostiz/posts";
 
+      const platforms = [
+        selectedPlatforms.facebook ? "facebook" : null,
+        selectedPlatforms.instagram ? "instagram" : null,
+        selectedPlatforms.tiktok ? "tiktok" : null,
+      ].filter(Boolean);
+
+      if (!platforms.length) {
+        throw new Error("Select at least one platform.");
+      }
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -191,6 +281,9 @@ export default function DashboardPostizPage() {
           attachments: form.attachments,
           hashtags: form.hashtags,
           contentType: form.contentType,
+          comment: form.comment,
+          platforms,
+          platform: platforms[0],
           scheduledAt: composeScheduledAt(form),
         }),
       });
@@ -313,6 +406,56 @@ export default function DashboardPostizPage() {
           </div>
 
           <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+            <p className="mb-2 text-sm font-semibold text-slate-800">Platforms</p>
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+              <label className="inline-flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={selectedPlatforms.facebook}
+                  onChange={(event) =>
+                    setSelectedPlatforms((prev) => ({ ...prev, facebook: event.target.checked }))
+                  }
+                />
+                Facebook
+              </label>
+              <label className="inline-flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={selectedPlatforms.instagram}
+                  onChange={(event) =>
+                    setSelectedPlatforms((prev) => ({ ...prev, instagram: event.target.checked }))
+                  }
+                />
+                Instagram
+              </label>
+              <label className="inline-flex items-center gap-2 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={selectedPlatforms.tiktok}
+                  onChange={(event) =>
+                    setSelectedPlatforms((prev) => ({ ...prev, tiktok: event.target.checked }))
+                  }
+                />
+                TikTok
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-slate-700">
+              Follow-up comment (FB/IG only)
+            </label>
+            <input
+              value={form.comment}
+              onChange={(event) =>
+                setForm((prev) => ({ ...prev, comment: event.target.value }))
+              }
+              className="w-full rounded-md border border-slate-300 p-3 text-sm"
+              placeholder="https://www.resevia.co.uk/"
+            />
+          </div>
+
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
             <p className="mb-2 text-sm font-semibold text-slate-800">Schedule (optional)</p>
             <p className="mb-3 text-xs text-slate-600">
               Pick the date and time you want. Preview shows your local time.
@@ -395,7 +538,7 @@ export default function DashboardPostizPage() {
       </section>
 
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">Future Posts</h2>
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Future Posts ({futurePosts.length})</h2>
 
         {loading ? <p className="text-sm text-slate-600">Loading posts...</p> : null}
 
@@ -408,18 +551,28 @@ export default function DashboardPostizPage() {
         <div className="space-y-4">
           {futurePosts.map((post) => (
             <article key={post.id} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="mb-3 flex flex-wrap items-start justify-between gap-4">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500">Page: {pageLabel(post)}</p>
-                  <p className="text-xs text-slate-500">Type: {post.contentType}</p>
-                  <p className="text-xs text-slate-500">Assets: {post.attachments.length}</p>
-                  {post.status ? <p className="text-xs text-slate-500">Status: {post.status}</p> : null}
+                  <p className="text-sm font-medium text-slate-700">
+                    <span className="mr-2 inline-flex align-middle">{pageIcon(post)}</span>
+                    Page: {pageLabel(post)}
+                  </p>
                   <p className="text-xs text-slate-500">Scheduled: {formatDateLabel(post.scheduledAt)}</p>
-                  <p className="text-xs text-slate-500">Created: {formatDateLabel(post.createdAt)}</p>
-                  <p className="text-xs text-slate-500">Post ID: {post.id}</p>
+                  {isPostError(post) ? (
+                    <p className="mt-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
+                      Postiz error
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => togglePostOpen(post.id)}
+                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700"
+                  >
+                    {openPosts[post.id] ? "Collapse" : "Expand"}
+                  </button>
                   <button
                     type="button"
                     onClick={() => beginEdit(post)}
@@ -437,37 +590,57 @@ export default function DashboardPostizPage() {
                 </div>
               </div>
 
-              <p className="whitespace-pre-wrap text-sm text-slate-800">{post.text}</p>
-              {post.hashtags.length > 0 ? (
-                <p className="mt-2 text-xs text-slate-600">{post.hashtags.join(" ")}</p>
-              ) : null}
-
-              {post.attachments.length > 0 ? (
-                <div className="mt-4">
-                  <p className="mb-2 text-sm font-medium text-slate-700">Attachments</p>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    {post.attachments.map((url) => (
-                      <a
-                        key={url}
-                        href={url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="overflow-hidden rounded-md border border-slate-200"
-                      >
-                        {isImageUrl(url) ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={url} alt="Attachment preview" className="h-44 w-full object-cover" />
-                        ) : isVideoUrl(url) ? (
-                          <video src={url} controls className="h-44 w-full bg-slate-100 object-cover" />
-                        ) : (
-                          <div className="flex h-44 items-center justify-center bg-slate-50 px-3 text-center text-sm text-slate-600">
-                            {url}
-                          </div>
-                        )}
-                      </a>
-                    ))}
+              {openPosts[post.id] ? (
+                <>
+                  <div className="mb-3 grid grid-cols-1 gap-1 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 md:grid-cols-2">
+                    <p>Status: {post.status || "N/A"}</p>
+                    <p>Error: {isPostError(post) ? "Yes" : "No"}</p>
+                    <p>Type: {post.contentType}</p>
+                    <p>Assets: {post.attachments.length}</p>
+                    <p>Created: {formatDateLabel(post.createdAt)}</p>
+                    <p>Scheduled: {formatDateLabel(post.scheduledAt)}</p>
+                    <p>Post ID: {post.id}</p>
+                    <p>Integration: {post.integrationName || "N/A"}</p>
+                    <p>Provider: {post.integrationIdentifier || "N/A"}</p>
                   </div>
-                </div>
+                  {post.errorMessage ? (
+                    <p className="mb-3 rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+                      {post.errorMessage}
+                    </p>
+                  ) : null}
+                  <p className="whitespace-pre-wrap text-sm text-slate-800">{post.text}</p>
+                  {post.hashtags.length > 0 ? (
+                    <p className="mt-2 text-xs text-slate-600">{post.hashtags.join(" ")}</p>
+                  ) : null}
+
+                  {post.attachments.length > 0 ? (
+                    <div className="mt-4">
+                      <p className="mb-2 text-sm font-medium text-slate-700">Attachments</p>
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        {post.attachments.map((url) => (
+                          <a
+                            key={url}
+                            href={url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="overflow-hidden rounded-md border border-slate-200"
+                          >
+                            {isImageUrl(url) ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={url} alt="Attachment preview" className="h-44 w-full object-cover" />
+                            ) : isVideoUrl(url) ? (
+                              <video src={url} controls className="h-44 w-full bg-slate-100 object-cover" />
+                            ) : (
+                              <div className="flex h-44 items-center justify-center bg-slate-50 px-3 text-center text-sm text-slate-600">
+                                {url}
+                              </div>
+                            )}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </>
               ) : null}
             </article>
           ))}
@@ -475,7 +648,7 @@ export default function DashboardPostizPage() {
       </section>
 
       <section className="mt-10">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">History Posts</h2>
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">History Posts ({historyPosts.length})</h2>
         {!loading && historyPosts.length === 0 ? (
           <p className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
             No history posts found.
@@ -484,18 +657,28 @@ export default function DashboardPostizPage() {
         <div className="space-y-4">
           {historyPosts.map((post) => (
             <article key={post.id} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="mb-3 flex flex-wrap items-start justify-between gap-4">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-medium text-slate-500">Page: {pageLabel(post)}</p>
-                  <p className="text-xs text-slate-500">Type: {post.contentType}</p>
-                  <p className="text-xs text-slate-500">Assets: {post.attachments.length}</p>
-                  {post.status ? <p className="text-xs text-slate-500">Status: {post.status}</p> : null}
+                  <p className="text-sm font-medium text-slate-700">
+                    <span className="mr-2 inline-flex align-middle">{pageIcon(post)}</span>
+                    Page: {pageLabel(post)}
+                  </p>
                   <p className="text-xs text-slate-500">Scheduled: {formatDateLabel(post.scheduledAt)}</p>
-                  <p className="text-xs text-slate-500">Created: {formatDateLabel(post.createdAt)}</p>
-                  <p className="text-xs text-slate-500">Post ID: {post.id}</p>
+                  {isPostError(post) ? (
+                    <p className="mt-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
+                      Postiz error
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => togglePostOpen(post.id)}
+                    className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700"
+                  >
+                    {openPosts[post.id] ? "Collapse" : "Expand"}
+                  </button>
                   <button
                     type="button"
                     onClick={() => beginEdit(post)}
@@ -513,9 +696,29 @@ export default function DashboardPostizPage() {
                 </div>
               </div>
 
-              <p className="whitespace-pre-wrap text-sm text-slate-800">{post.text}</p>
-              {post.hashtags.length > 0 ? (
-                <p className="mt-2 text-xs text-slate-600">{post.hashtags.join(" ")}</p>
+              {openPosts[post.id] ? (
+                <>
+                  <div className="mb-3 grid grid-cols-1 gap-1 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 md:grid-cols-2">
+                    <p>Status: {post.status || "N/A"}</p>
+                    <p>Error: {isPostError(post) ? "Yes" : "No"}</p>
+                    <p>Type: {post.contentType}</p>
+                    <p>Assets: {post.attachments.length}</p>
+                    <p>Created: {formatDateLabel(post.createdAt)}</p>
+                    <p>Scheduled: {formatDateLabel(post.scheduledAt)}</p>
+                    <p>Post ID: {post.id}</p>
+                    <p>Integration: {post.integrationName || "N/A"}</p>
+                    <p>Provider: {post.integrationIdentifier || "N/A"}</p>
+                  </div>
+                  {post.errorMessage ? (
+                    <p className="mb-3 rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-700">
+                      {post.errorMessage}
+                    </p>
+                  ) : null}
+                  <p className="whitespace-pre-wrap text-sm text-slate-800">{post.text}</p>
+                  {post.hashtags.length > 0 ? (
+                    <p className="mt-2 text-xs text-slate-600">{post.hashtags.join(" ")}</p>
+                  ) : null}
+                </>
               ) : null}
             </article>
           ))}
