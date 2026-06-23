@@ -93,7 +93,7 @@ export default async function BlogIndexPage() {
                   <CoverImage
                     src={coverImageFor(post)}
                     alt={post.title}
-                    className="w-full aspect-[16/10] bg-brand-light object-contain"
+                    className="w-full aspect-[16/15] bg-brand-light object-contain"
                   />
                   <div className="p-6">
                     <p className="text-xs text-brand-gray mb-2">{formatDate(post.published_at)}</p>
