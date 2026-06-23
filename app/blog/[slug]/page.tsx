@@ -116,7 +116,7 @@ export default async function BlogPostPage({
           <CoverImage
             src={coverImageFor(post)}
             alt={post.title}
-            className="w-full h-64 md:h-80 object-cover rounded-2xl mb-10"
+            className="w-full max-h-[28rem] bg-brand-light object-contain rounded-2xl mb-10"
           />
 
           <div className="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-brand-black prose-p:text-brand-gray prose-li:text-brand-gray prose-strong:text-brand-black prose-a:text-brand-purple">
