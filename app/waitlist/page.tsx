@@ -8,12 +8,24 @@ import { SlotCounter } from '@/components/ui/SlotCounter';
 import Cookies from 'js-cookie';
 
 export default function WaitlistPage() {
-  const [currentSlots, setCurrentSlots] = useState<number | undefined>(undefined);
+  const [currentSignedUps, setCurrentSignedUps] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    const cookie = Cookies.get('resevia_slots');
-    if (cookie) {
-      setCurrentSlots(parseInt(cookie, 10));
+    const signedUpCookie = Cookies.get('resevia_signed_up');
+    if (signedUpCookie) {
+      const parsedSignedUps = parseInt(signedUpCookie, 10);
+      if (!isNaN(parsedSignedUps)) {
+        setCurrentSignedUps(parsedSignedUps);
+      }
+      return;
+    }
+
+    const legacySlotsCookie = Cookies.get('resevia_slots');
+    if (legacySlotsCookie) {
+      const parsedLegacySlots = parseInt(legacySlotsCookie, 10);
+      if (!isNaN(parsedLegacySlots)) {
+        setCurrentSignedUps(Math.max(0, Math.min(50, 50 - parsedLegacySlots)));
+      }
     }
   }, []);
   return (
@@ -27,7 +39,7 @@ export default function WaitlistPage() {
             <p className="text-xl text-brand-gray mb-6">
               We're launching soon. Join the waitlist to:
             </p>
-            <SlotCounter slotsOverride={currentSlots} />
+            <SlotCounter signedUpOverride={currentSignedUps} />
             <ul className="space-y-4 mb-8 mt-4 text-lg text-brand-black font-medium">
               <li className="flex items-center">
                 <span className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-4 shrink-0">✓</span>
@@ -45,7 +57,7 @@ export default function WaitlistPage() {
           </div>
 
           <div className="flex-1 w-full bg-brand-light p-8 rounded-2xl border border-gray-100 shadow-sm">
-            <WaitlistForm onSlotDecrement={setCurrentSlots} />
+            <WaitlistForm onSignupIncrement={setCurrentSignedUps} />
           </div>
 
         </div>

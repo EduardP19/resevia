@@ -3,12 +3,17 @@
 import React, { useState } from 'react';
 import { Button } from './Button';
 import Cookies from 'js-cookie';
+import {
+  TOTAL_FOUNDER_SPOTS,
+  SIGNED_UP_COOKIE_KEY,
+  LEGACY_SLOTS_COOKIE_KEY,
+} from '@/lib/founderOffer';
 
 interface WaitlistFormProps {
-  onSlotDecrement?: (newSlots: number) => void;
+  onSignupIncrement?: (newSignedUpCount: number) => void;
 }
 
-export function WaitlistForm({ onSlotDecrement }: WaitlistFormProps = {}) {
+export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,16 +52,31 @@ export function WaitlistForm({ onSlotDecrement }: WaitlistFormProps = {}) {
         (window as any).fbq('track', 'Lead');
       }
 
-      const existingCookie = Cookies.get('resevia_slots');
-      if (existingCookie) {
-        let current = parseInt(existingCookie, 10);
-        if (!isNaN(current)) {
-          const newVal = Math.max(0, current - 1);
-          Cookies.set('resevia_slots', newVal.toString(), { expires: 365 });
-          if (onSlotDecrement) {
-            onSlotDecrement(newVal);
-          }
+      const signedUpCookie = Cookies.get(SIGNED_UP_COOKIE_KEY);
+      const legacySlotsCookie = Cookies.get(LEGACY_SLOTS_COOKIE_KEY);
+
+      let currentSignedUps = 0;
+
+      if (signedUpCookie) {
+        const parsedSignedUps = parseInt(signedUpCookie, 10);
+        if (!isNaN(parsedSignedUps)) {
+          currentSignedUps = parsedSignedUps;
         }
+      } else if (legacySlotsCookie) {
+        const parsedLegacySlots = parseInt(legacySlotsCookie, 10);
+        if (!isNaN(parsedLegacySlots)) {
+          currentSignedUps = Math.max(0, Math.min(TOTAL_FOUNDER_SPOTS, TOTAL_FOUNDER_SPOTS - parsedLegacySlots));
+        }
+      }
+
+      const newSignedUpCount = Math.min(TOTAL_FOUNDER_SPOTS, currentSignedUps + 1);
+      const newSlotsRemaining = Math.max(0, TOTAL_FOUNDER_SPOTS - newSignedUpCount);
+
+      Cookies.set(SIGNED_UP_COOKIE_KEY, newSignedUpCount.toString(), { expires: 365 });
+      Cookies.set(LEGACY_SLOTS_COOKIE_KEY, newSlotsRemaining.toString(), { expires: 365 });
+
+      if (onSignupIncrement) {
+        onSignupIncrement(newSignedUpCount);
       }
     } catch (err: any) {
       setError(err.message);

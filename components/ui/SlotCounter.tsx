@@ -3,34 +3,57 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { motion } from 'framer-motion';
+import {
+  TOTAL_FOUNDER_SPOTS,
+  SIGNED_UP_COOKIE_KEY,
+  LEGACY_SLOTS_COOKIE_KEY,
+  displayedSignups,
+} from '@/lib/founderOffer';
 
 interface SlotCounterProps {
-  slotsOverride?: number;
+  signedUpOverride?: number;
   theme?: 'light' | 'dark';
 }
 
-export function SlotCounter({ slotsOverride, theme = 'light' }: SlotCounterProps) {
-  const [slotsRemaining, setSlotsRemaining] = useState<number | null>(null);
+export function SlotCounter({ signedUpOverride, theme = 'light' }: SlotCounterProps) {
+  const [signedUpCount, setSignedUpCount] = useState<number | null>(null);
 
   useEffect(() => {
-    if (slotsOverride !== undefined) {
-      setSlotsRemaining(slotsOverride);
+    if (signedUpOverride !== undefined) {
+      setSignedUpCount(signedUpOverride);
       return;
     }
 
-    const existingCookie = Cookies.get('resevia_slots');
-    if (existingCookie) {
-      setSlotsRemaining(parseInt(existingCookie, 10));
-    } else {
-      const randomSlots = Math.floor(Math.random() * (50 - 30 + 1)) + 30;
-      Cookies.set('resevia_slots', randomSlots.toString(), { expires: 365 });
-      setSlotsRemaining(randomSlots);
+    const signedUpCookie = Cookies.get(SIGNED_UP_COOKIE_KEY);
+    if (signedUpCookie) {
+      const parsed = parseInt(signedUpCookie, 10);
+      if (!isNaN(parsed)) {
+        setSignedUpCount(parsed);
+        return;
+      }
     }
-  }, [slotsOverride]);
 
-  if (slotsRemaining === null) return null;
+    const legacySlotsCookie = Cookies.get(LEGACY_SLOTS_COOKIE_KEY);
+    if (legacySlotsCookie) {
+      const parsedSlots = parseInt(legacySlotsCookie, 10);
+      if (!isNaN(parsedSlots)) {
+        const migratedSignedUps = Math.max(0, Math.min(TOTAL_FOUNDER_SPOTS, TOTAL_FOUNDER_SPOTS - parsedSlots));
+        Cookies.set(SIGNED_UP_COOKIE_KEY, migratedSignedUps.toString(), { expires: 365 });
+        setSignedUpCount(migratedSignedUps);
+        return;
+      }
+    }
 
-  const filledPercentage = ((50 - slotsRemaining) / 50) * 100;
+    Cookies.set(SIGNED_UP_COOKIE_KEY, '0', { expires: 365 });
+    Cookies.set(LEGACY_SLOTS_COOKIE_KEY, TOTAL_FOUNDER_SPOTS.toString(), { expires: 365 });
+    setSignedUpCount(0);
+  }, [signedUpOverride]);
+
+  if (signedUpCount === null) return null;
+
+  const displayedCount = displayedSignups(signedUpCount);
+  const slotsRemaining = Math.max(0, TOTAL_FOUNDER_SPOTS - displayedCount);
+  const filledPercentage = (displayedCount / TOTAL_FOUNDER_SPOTS) * 100;
 
   return (
     <motion.div
@@ -40,7 +63,7 @@ export function SlotCounter({ slotsOverride, theme = 'light' }: SlotCounterProps
       className="w-full max-w-sm mx-auto mt-4 mb-6"
     >
       <p className={`text-center text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-brand-black'}`}>
-        Only <span className={theme === 'dark' ? 'font-bold text-brand-gold' : 'font-bold text-[#6D28D9]'}>{slotsRemaining}</span> founding member spots remaining
+        <span className={theme === 'dark' ? 'font-bold text-brand-gold' : 'font-bold text-[#6D28D9]'}>{displayedCount}</span> businesses have signed up so far ({slotsRemaining} spots left)
       </p>
       <div className={`w-full h-1 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-white/10' : 'bg-[#FBF5E9]'}`}>
         <motion.div

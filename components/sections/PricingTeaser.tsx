@@ -16,14 +16,14 @@ export function PricingTeaser() {
       price: "£79",
       description: "Perfect for small businesses getting started with AI reception.",
       features: [
+        "500 SMS conversations / month included (≈ 50 client chats)",
         "Calendar integration — books directly into your existing system.",
         "AI receptionist on your website chat",
         "Handles enquiries, FAQs and pricing questions",
-        "Text-based conversations only",
+        "Text-based conversations (SMS + website chat)",
         "Booking link sharing (directs clients to your existing booking page)",
         "Email notifications for new enquiries",
         "SMS booking notifications",
-        "Up to 500 conversations per month",
         "Standard response time",
         "Email support"
       ],
@@ -36,14 +36,14 @@ export function PricingTeaser() {
       badge: "Most Popular",
       description: "The complete AI reception experience for growing businesses.",
       features: [
-        "Calendar integration — books directly into your existing system.",
+        "2,000 SMS + WhatsApp conversations / month included",
+        "300 AI voice minutes / month included",
         "Everything in Essentials",
         "AI voice receptionist — answers phone calls in your brand voice",
         "WhatsApp Business integration — clients can book via WhatsApp",
         "Direct calendar booking — books straight into your system, no redirects",
         "Automated appointment reminders via SMS and WhatsApp",
         "No-show follow-ups sent automatically",
-        "Up to 2,000 conversations per month",
         "Priority response time",
         "Chat and email support"
       ]
@@ -55,9 +55,8 @@ export function PricingTeaser() {
       badge: "For Power Users",
       description: "Maximum capability for high-volume businesses and multi-location operators.",
       features: [
-        "Calendar integration — books directly into your existing system.",
+        "Fair-use unlimited conversations & voice minutes",
         "Everything in Growth",
-        "Unlimited conversations",
         "Multi-location support — one account, multiple branches",
         "Custom AI personality — fully bespoke tone, name and persona for your brand",
         "CRM integration — syncs client data with your existing CRM",
@@ -181,9 +180,14 @@ export function PricingTeaser() {
             );
           })}
         </div>
+        <p className="text-center text-sm text-brand-gray max-w-3xl mx-auto mb-10">
+          Every plan includes generous monthly SMS, WhatsApp and voice allowances. Need more? Additional usage is simply billed at cost — and we&apos;ll always flag it before you hit a limit, so there are never any surprises.
+        </p>
+
         <div className="text-center bg-brand-gold/10 border border-brand-gold/30 p-8 rounded-2xl max-w-4xl mx-auto backdrop-blur-sm shadow-inner">
-          <Badge className="bg-brand-gold text-brand-black mb-4 px-4 py-1.5 font-bold animate-bounce">LIMITED TIME: GOLDEN OFFER</Badge>
-          <p className="text-brand-black font-display font-bold text-xl mb-4">First 50 businesses get free setup (worth £499) + first month free on any plan.</p>
+          <Badge className="bg-brand-gold text-brand-black mb-4 px-4 py-1.5 font-bold animate-bounce">FOUNDING SALON PILOT</Badge>
+          <p className="text-brand-black font-display font-bold text-xl mb-2">First 50 salons join the pilot: free setup (worth £499) + first month completely free on any plan.</p>
+          <p className="text-brand-gray text-sm mb-4">No credit card to reserve your spot. Cancel anytime during your free month.</p>
           <SlotCounter />
         </div>
       </div>

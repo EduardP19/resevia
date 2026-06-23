@@ -7,12 +7,24 @@ import { WaitlistForm } from '@/components/ui/WaitlistForm';
 import { SlotCounter } from '@/components/ui/SlotCounter';
 
 export function FinalCTA() {
-  const [currentSlots, setCurrentSlots] = useState<number | undefined>(undefined);
+  const [currentSignedUps, setCurrentSignedUps] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    const cookie = Cookies.get('resevia_slots');
-    if (cookie) {
-      setCurrentSlots(parseInt(cookie, 10));
+    const signedUpCookie = Cookies.get('resevia_signed_up');
+    if (signedUpCookie) {
+      const parsedSignedUps = parseInt(signedUpCookie, 10);
+      if (!isNaN(parsedSignedUps)) {
+        setCurrentSignedUps(parsedSignedUps);
+      }
+      return;
+    }
+
+    const legacySlotsCookie = Cookies.get('resevia_slots');
+    if (legacySlotsCookie) {
+      const parsedLegacySlots = parseInt(legacySlotsCookie, 10);
+      if (!isNaN(parsedLegacySlots)) {
+        setCurrentSignedUps(Math.max(0, Math.min(50, 50 - parsedLegacySlots)));
+      }
     }
   }, []);
   return (
@@ -29,10 +41,10 @@ export function FinalCTA() {
             Join the waitlist today to secure free setup worth £499 and your first month free. Limited to the first 50 businesses.
           </p>
 
-          <SlotCounter slotsOverride={currentSlots} />
+          <SlotCounter signedUpOverride={currentSignedUps} />
 
           <div className="bg-brand-light p-8 md:p-12 rounded-2xl border border-gray-100 max-w-xl mx-auto">
-            <WaitlistForm onSlotDecrement={setCurrentSlots} />
+            <WaitlistForm onSignupIncrement={setCurrentSignedUps} />
           </div>
         </motion.div>
       </div>

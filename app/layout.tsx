@@ -19,26 +19,70 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteUrl = "https://resevia.co.uk";
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://resevia.co.uk/#organization",
+        "@id": `${siteUrl}/#organization`,
         "name": "Resevia",
-        "url": "https://resevia.co.uk",
-        "description": "Your AI receptionist. Always ready. Resevia handles calls, bookings and enquiries 24/7."
+        "url": siteUrl,
+        "logo": `${siteUrl}/ReseviaLogo.png`,
+        "description": "Your AI receptionist. Always ready. Resevia handles calls, bookings and enquiries 24/7 for beauty salons, aesthetic clinics and dental practices.",
+        "email": "hello@resevia.co.uk",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Kingdom"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "hello@resevia.co.uk",
+          "contactType": "customer support",
+          "areaServed": "GB",
+          "availableLanguage": "English"
+        },
+        "sameAs": [
+          "https://www.instagram.com/resevia.ai"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        "name": "Resevia",
+        "url": siteUrl,
+        "description": "AI receptionist for salons and clinics — every call answered, every booking captured.",
+        "publisher": {
+          "@id": `${siteUrl}/#organization`
+        },
+        "inLanguage": "en-GB"
       },
       {
         "@type": "SoftwareApplication",
-        "@id": "https://resevia.co.uk/#software",
+        "@id": `${siteUrl}/#software`,
         "name": "Resevia AI Receptionist",
+        "url": siteUrl,
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "All",
+        "description": "Resevia is an AI receptionist that answers calls, replies to enquiries over SMS and WhatsApp, books appointments and sends reminders 24/7 — built for beauty salons, aesthetic clinics and dental practices.",
+        "publisher": {
+          "@id": `${siteUrl}/#organization`
+        },
+        "featureList": [
+          "24/7 AI receptionist",
+          "Missed-call text-back",
+          "SMS and WhatsApp booking",
+          "AI voice receptionist",
+          "Automated appointment reminders",
+          "No-show follow-ups",
+          "Calendar integration"
+        ],
         "offers": {
-          "@type": "Offer",
-          "price": "79.00",
-          "priceCurrency": "GBP"
+          "@type": "AggregateOffer",
+          "priceCurrency": "GBP",
+          "lowPrice": "79",
+          "highPrice": "499",
+          "offerCount": "3"
         }
       }
     ]

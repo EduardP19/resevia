@@ -45,6 +45,9 @@ export function Navbar() {
             <Link href="/pricing" className="text-sm font-medium text-brand-gray hover:text-brand-purple transition-colors">
               Pricing
             </Link>
+            <Link href="/blog" className="text-sm font-medium text-brand-gray hover:text-brand-purple transition-colors">
+              Blog
+            </Link>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">

@@ -31,6 +31,10 @@ export default function PricingPage() {
               <p className="text-brand-gray">A: Any interaction with a client — a message thread, a WhatsApp exchange, or a phone call. Multiple messages within a one-hour window count as a single conversation.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-gray-100">
+              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What&apos;s included in my plan&apos;s allowance?</h4>
+              <p className="text-brand-gray">A: Each plan comes with a generous monthly allowance of SMS, WhatsApp and (on Growth and above) AI voice minutes — Essentials includes 500 SMS conversations, Growth includes 2,000 SMS/WhatsApp conversations plus 300 voice minutes, and Elite is fair-use unlimited. If you ever need more, extra usage is billed transparently at cost and we&apos;ll always flag it before you reach a limit.</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-gray-100">
               <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Can I upgrade or downgrade between plans?</h4>
               <p className="text-brand-gray">A: Yes. You can change your plan at any time from your dashboard. Changes take effect on your next billing date.</p>
             </div>
