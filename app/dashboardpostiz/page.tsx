@@ -557,6 +557,7 @@ export default function DashboardPostizPage() {
                     <span className="mr-2 inline-flex align-middle">{pageIcon(post)}</span>
                     Page: {pageLabel(post)}
                   </p>
+                  <p className="text-xs text-slate-500">Created: {formatDateLabel(post.createdAt)}</p>
                   <p className="text-xs text-slate-500">Scheduled: {formatDateLabel(post.scheduledAt)}</p>
                   {isPostError(post) ? (
                     <p className="mt-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
@@ -663,6 +664,7 @@ export default function DashboardPostizPage() {
                     <span className="mr-2 inline-flex align-middle">{pageIcon(post)}</span>
                     Page: {pageLabel(post)}
                   </p>
+                  <p className="text-xs text-slate-500">Created: {formatDateLabel(post.createdAt)}</p>
                   <p className="text-xs text-slate-500">Scheduled: {formatDateLabel(post.scheduledAt)}</p>
                   {isPostError(post) ? (
                     <p className="mt-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
