@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 type TemplatePayload = {
+  template_key?: string | null;
   name?: string;
   channel?: "email" | "sms";
   subject?: string | null;
@@ -46,6 +47,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as TemplatePayload;
+    const templateKey = body.template_key?.trim() || null;
     const name = body.name?.trim();
     const channel = body.channel;
     const subject = body.subject?.trim() || null;
@@ -90,6 +92,7 @@ export async function POST(request: Request) {
       .from("message_templates")
       .insert([
         {
+          template_key: templateKey,
           name,
           channel,
           subject,
@@ -99,7 +102,7 @@ export async function POST(request: Request) {
           description,
         },
       ])
-      .select("id, created_at, updated_at, name, channel, subject, body_text, body_html, parameter_keys, description, is_active")
+      .select("id, template_key, created_at, updated_at, name, channel, subject, body_text, body_html, parameter_keys, description, is_active")
       .single();
 
     if (error) {

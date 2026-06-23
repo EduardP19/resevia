@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { resend } from '@/lib/resend';
-import { buildWaitlistConfirmationEmail } from '@/lib/emails/waitlistConfirmation';
+import { renderHtmlTemplate, renderTextTemplate } from '@/lib/emails/renderTemplate';
 
 export async function POST(request: Request) {
   try {
@@ -26,16 +27,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
-    // Send branded confirmation email (HTML + plain-text for deliverability)
-    const { subject, html, text } = buildWaitlistConfirmationEmail(first_name);
+    const admin = getSupabaseAdmin();
+    const { data: template, error: templateError } = await admin
+      .from('message_templates')
+      .select('subject, body_text, body_html')
+      .eq('template_key', 'waitlist_signup')
+      .eq('channel', 'email')
+      .eq('is_active', true)
+      .single();
+
+    if (templateError || !template) {
+      console.error('Waitlist template error:', templateError);
+      return NextResponse.json({ error: 'Waitlist email template not found' }, { status: 500 });
+    }
+
+    const subject = renderTextTemplate(template.subject || '', { first_name });
+    const text = renderTextTemplate(template.body_text || '', { first_name });
+    const html = template.body_html ? renderHtmlTemplate(template.body_html, { first_name }) : null;
 
     const { error: emailError } = await resend.emails.send({
       from: 'Resevia <hello@resevia.co.uk>',
       to: email,
       replyTo: 'hello@resevia.co.uk',
       subject,
-      html,
       text,
+      ...(html ? { html } : {}),
       headers: {
         'List-Unsubscribe': '<mailto:hello@resevia.co.uk?subject=unsubscribe>',
       },

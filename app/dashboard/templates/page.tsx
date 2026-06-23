@@ -5,6 +5,7 @@ import { DashboardNav } from "@/components/dashboard/DashboardNav";
 
 type Template = {
   id: string;
+  template_key: string | null;
   name: string;
   channel: "email" | "sms";
   subject: string | null;
@@ -17,6 +18,7 @@ type Template = {
 };
 
 const emptyForm = {
+  templateKey: "",
   name: "",
   channel: "email" as "email" | "sms",
   subject: "",
@@ -33,16 +35,61 @@ function formatDate(iso: string) {
 
 function templatePreviewHtml(template: Template) {
   if (template.channel === "sms") {
-    return `<div style="font-family: Inter, Arial, sans-serif; padding: 20px; white-space: pre-wrap; color: #111827;">${escapeHtml(template.body_text)}</div>`;
+    return `<!doctype html><html><head><meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+        html, body { height: 100%; margin: 0; }
+        body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f8fafc;
+          color: #111827;
+          font-family: Inter, Arial, sans-serif;
+        }
+        .sms {
+          max-width: 420px;
+          width: calc(100% - 48px);
+          padding: 24px;
+          white-space: pre-wrap;
+          background: #fff;
+          border: 1px solid #e2e8f0;
+          border-radius: 18px;
+          box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+        }
+      </style></head><body><div class="sms">${escapeHtml(template.body_text)}</div></body></html>`;
   }
 
   const body = template.body_html || `<p>${escapeHtml(template.body_text)}</p>`;
   return `<!doctype html><html><head><meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      body { margin: 0; font-family: Inter, Arial, sans-serif; background: #f8fafc; color: #111827; }
-      .wrap { padding: 24px; }
-      .card { max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08); }
+      html, body { height: 100%; margin: 0; }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        color: #111827;
+        font-family: Inter, Arial, sans-serif;
+        overflow: auto;
+      }
+      .wrap {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .card {
+        width: min(640px, 100%);
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      }
       .head { padding: 18px 22px; border-bottom: 1px solid #e2e8f0; background: #111827; color: #fff; }
       .body { padding: 22px; line-height: 1.6; }
       img { max-width: 100%; height: auto; }
@@ -103,6 +150,7 @@ export default function DashboardTemplatesPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          template_key: form.templateKey || null,
           name: form.name,
           channel: form.channel,
           subject: form.channel === "email" ? form.subject : null,
@@ -144,6 +192,15 @@ export default function DashboardTemplatesPage() {
             <h2 className="mb-4 text-lg font-semibold text-brand-black">New Template</h2>
             <form className="space-y-4" onSubmit={onSubmit}>
               <div className="grid gap-4 sm:grid-cols-2">
+                <label className="text-sm text-brand-gray">
+                  <span className="mb-1 block">Template key</span>
+                  <input
+                    value={form.templateKey}
+                    onChange={(event) => setForm((current) => ({ ...current, templateKey: event.target.value }))}
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
+                    placeholder="waitlist_signup"
+                  />
+                </label>
                 <label className="text-sm text-brand-gray">
                   <span className="mb-1 block">Template name</span>
                   <input
@@ -266,7 +323,15 @@ export default function DashboardTemplatesPage() {
                   }`}
                 >
                   <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <h3 className="text-base font-semibold text-brand-black">{template.name}</h3>
+                    <h3 className="text-base font-semibold text-brand-black">
+                      {template.channel === "email" ? "Email template " : "SMS template "}
+                      {template.name}
+                    </h3>
+                    {template.template_key ? (
+                      <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
+                        {template.template_key}
+                      </span>
+                    ) : null}
                     <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-slate-700">
                       {template.channel}
                     </span>
@@ -311,7 +376,7 @@ export default function DashboardTemplatesPage() {
                       sandbox=""
                     />
                   ) : (
-                    <div className="p-5">
+                    <div className="flex h-[36rem] items-center justify-center overflow-auto p-5">
                       <p className="whitespace-pre-wrap text-sm text-brand-black">{selectedTemplate.body_text}</p>
                     </div>
                   )}
