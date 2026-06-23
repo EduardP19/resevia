@@ -5,11 +5,24 @@ type TemplatePayload = {
   name?: string;
   channel?: "email" | "sms";
   subject?: string | null;
-  body_text?: string;
+  body_text?: string | null;
   body_html?: string | null;
   parameter_keys?: string[];
   description?: string | null;
 };
+
+function htmlToText(html: string) {
+  return html
+    .replace(/<\s*br\s*\/?\s*>/gi, "\n")
+    .replace(/<\/p>\s*<p[^>]*>/gi, "\n\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .trim();
+}
 
 export async function GET() {
   try {
@@ -36,15 +49,15 @@ export async function POST(request: Request) {
     const name = body.name?.trim();
     const channel = body.channel;
     const subject = body.subject?.trim() || null;
-    const bodyText = body.body_text?.trim();
+    const bodyText = body.body_text?.trim() || null;
     const bodyHtml = body.body_html?.trim() || null;
     const description = body.description?.trim() || null;
     const parameterKeys = Array.isArray(body.parameter_keys)
       ? body.parameter_keys.map((value) => value.trim()).filter(Boolean)
       : [];
 
-    if (!name || !channel || !bodyText) {
-      return NextResponse.json({ error: "Name, channel, and body text are required" }, { status: 400 });
+    if (!name || !channel) {
+      return NextResponse.json({ error: "Name and channel are required" }, { status: 400 });
     }
 
     if (channel === "email" && !subject) {
@@ -55,6 +68,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "SMS templates cannot have a subject" }, { status: 400 });
     }
 
+    if (channel === "email" && !bodyHtml && !bodyText) {
+      return NextResponse.json({ error: "Email templates need HTML or text content" }, { status: 400 });
+    }
+
+    if (channel === "sms" && !bodyText) {
+      return NextResponse.json({ error: "SMS templates require text content" }, { status: 400 });
+    }
+
+    const resolvedBodyText =
+      channel === "email"
+        ? bodyText || (bodyHtml ? htmlToText(bodyHtml) : null)
+        : bodyText;
+
+    if (!resolvedBodyText) {
+      return NextResponse.json({ error: "Could not derive a text version for this template" }, { status: 400 });
+    }
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
       .from("message_templates")
@@ -63,7 +93,7 @@ export async function POST(request: Request) {
           name,
           channel,
           subject,
-          body_text: bodyText,
+          body_text: resolvedBodyText,
           body_html: channel === "email" ? bodyHtml : null,
           parameter_keys: parameterKeys,
           description,

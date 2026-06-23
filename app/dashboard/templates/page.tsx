@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
 
 type Template = {
@@ -22,13 +22,41 @@ const emptyForm = {
   subject: "",
   parameterKeys: "name,email,phone",
   description: "",
-  bodyText: "",
   bodyHtml: "",
+  bodyText: "",
 };
 
 function formatDate(iso: string) {
   const parsed = new Date(iso);
   return Number.isNaN(parsed.getTime()) ? iso : parsed.toLocaleString();
+}
+
+function templatePreviewHtml(template: Template) {
+  if (template.channel === "sms") {
+    return `<div style="font-family: Inter, Arial, sans-serif; padding: 20px; white-space: pre-wrap; color: #111827;">${escapeHtml(template.body_text)}</div>`;
+  }
+
+  const body = template.body_html || `<p>${escapeHtml(template.body_text)}</p>`;
+  return `<!doctype html><html><head><meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { margin: 0; font-family: Inter, Arial, sans-serif; background: #f8fafc; color: #111827; }
+      .wrap { padding: 24px; }
+      .card { max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08); }
+      .head { padding: 18px 22px; border-bottom: 1px solid #e2e8f0; background: #111827; color: #fff; }
+      .body { padding: 22px; line-height: 1.6; }
+      img { max-width: 100%; height: auto; }
+      a { color: #0f172a; }
+    </style></head><body><div class="wrap"><div class="card"><div class="head">${escapeHtml(template.subject || template.name)}</div><div class="body">${body}</div></div></div></body></html>`;
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export default function DashboardTemplatesPage() {
@@ -37,6 +65,12 @@ export default function DashboardTemplatesPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+
+  const selectedTemplate = useMemo(
+    () => templates.find((template) => template.id === selectedTemplateId) ?? templates[0] ?? null,
+    [selectedTemplateId, templates]
+  );
 
   async function loadTemplates() {
     setLoading(true);
@@ -72,7 +106,7 @@ export default function DashboardTemplatesPage() {
           name: form.name,
           channel: form.channel,
           subject: form.channel === "email" ? form.subject : null,
-          body_text: form.bodyText,
+          body_text: form.channel === "email" ? form.bodyText.trim() || null : form.bodyText,
           body_html: form.channel === "email" ? form.bodyHtml : null,
           description: form.description,
           parameter_keys: form.parameterKeys
@@ -101,7 +135,7 @@ export default function DashboardTemplatesPage() {
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-2 font-display text-3xl font-bold text-brand-black">Message Templates</h1>
         <p className="mb-6 max-w-3xl text-sm text-brand-gray">
-          Create reusable SMS and email templates with placeholders. Email templates can store both text and HTML for later sending through Resend.
+          Create reusable SMS and email templates with placeholders. Email templates are HTML-first, with plain text derived automatically for fallback.
         </p>
         <DashboardNav />
 
@@ -173,17 +207,6 @@ export default function DashboardTemplatesPage() {
                 />
               </label>
 
-              <label className="block text-sm text-brand-gray">
-                <span className="mb-1 block">Text body</span>
-                <textarea
-                  value={form.bodyText}
-                  onChange={(event) => setForm((current) => ({ ...current, bodyText: event.target.value }))}
-                  className="min-h-40 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
-                  placeholder={"Hi {{name}},\nThanks for your enquiry..."}
-                  required
-                />
-              </label>
-
               {form.channel === "email" ? (
                 <label className="block text-sm text-brand-gray">
                   <span className="mb-1 block">HTML body</span>
@@ -192,6 +215,20 @@ export default function DashboardTemplatesPage() {
                     onChange={(event) => setForm((current) => ({ ...current, bodyHtml: event.target.value }))}
                     className="min-h-40 w-full rounded-xl border border-slate-200 px-3 py-2 font-mono text-sm text-brand-black outline-none focus:border-brand-black"
                     placeholder={"<p>Hi {{name}},</p><p>Thanks for your enquiry...</p>"}
+                    required
+                  />
+                </label>
+              ) : null}
+
+              {form.channel === "sms" ? (
+                <label className="block text-sm text-brand-gray">
+                  <span className="mb-1 block">Text body</span>
+                  <textarea
+                    value={form.bodyText}
+                    onChange={(event) => setForm((current) => ({ ...current, bodyText: event.target.value }))}
+                    className="min-h-40 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
+                    placeholder={"Hi {{name}}, thanks for your enquiry..."}
+                    required
                   />
                 </label>
               ) : null}
@@ -218,7 +255,16 @@ export default function DashboardTemplatesPage() {
             ) : null}
             <div className="space-y-4">
               {templates.map((template) => (
-                <article key={template.id} className="rounded-2xl border border-slate-200 p-4">
+                <button
+                  key={template.id}
+                  type="button"
+                  onClick={() => setSelectedTemplateId(template.id)}
+                  className={`w-full rounded-2xl border p-4 text-left transition ${
+                    selectedTemplate?.id === template.id
+                      ? "border-brand-black bg-slate-50 shadow-sm"
+                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/60"
+                  }`}
+                >
                   <div className="mb-3 flex flex-wrap items-center gap-2">
                     <h3 className="text-base font-semibold text-brand-black">{template.name}</h3>
                     <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-slate-700">
@@ -234,23 +280,44 @@ export default function DashboardTemplatesPage() {
                   {template.parameter_keys.length > 0 ? (
                     <p className="mb-3 text-xs text-brand-gray">Params: {template.parameter_keys.join(", ")}</p>
                   ) : null}
-                  <div className="grid gap-4 lg:grid-cols-2">
-                    <div>
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brand-gray">Text</p>
-                      <pre className="whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-sm text-brand-black">{template.body_text}</pre>
-                    </div>
-                    {template.channel === "email" ? (
-                      <div>
-                        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-brand-gray">HTML</p>
-                        <pre className="whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-sm text-brand-black">
-                          {template.body_html || "No HTML version yet"}
-                        </pre>
-                      </div>
-                    ) : null}
-                  </div>
-                </article>
+                  <p className="text-xs font-medium text-brand-black">Click to preview</p>
+                </button>
               ))}
             </div>
+
+            {selectedTemplate ? (
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <div>
+                    <h3 className="text-base font-semibold text-brand-black">{selectedTemplate.name}</h3>
+                    <p className="text-xs text-brand-gray">
+                      {selectedTemplate.channel.toUpperCase()} preview
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTemplateId(null)}
+                    className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-brand-black ring-1 ring-slate-200"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  {selectedTemplate.channel === "email" ? (
+                    <iframe
+                      title={`${selectedTemplate.name} preview`}
+                      srcDoc={templatePreviewHtml(selectedTemplate)}
+                      className="h-[36rem] w-full"
+                      sandbox=""
+                    />
+                  ) : (
+                    <div className="p-5">
+                      <p className="whitespace-pre-wrap text-sm text-brand-black">{selectedTemplate.body_text}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
           </section>
         </div>
       </div>
