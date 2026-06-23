@@ -25,6 +25,14 @@ function htmlToText(html: string) {
     .trim();
 }
 
+function normalizeTemplateKey(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 export async function GET() {
   try {
     const admin = getSupabaseAdmin();
@@ -47,7 +55,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as TemplatePayload;
-    const templateKey = body.template_key?.trim() || null;
+    const templateKey = body.template_key ? normalizeTemplateKey(body.template_key) || null : null;
     const name = body.name?.trim();
     const channel = body.channel;
     const subject = body.subject?.trim() || null;

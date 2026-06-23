@@ -106,6 +106,14 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
+function normalizeTemplateKey(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 export default function DashboardTemplatesPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
@@ -196,10 +204,13 @@ export default function DashboardTemplatesPage() {
                   <span className="mb-1 block">Template key</span>
                   <input
                     value={form.templateKey}
-                    onChange={(event) => setForm((current) => ({ ...current, templateKey: event.target.value }))}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, templateKey: normalizeTemplateKey(event.target.value) }))
+                    }
                     className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
                     placeholder="waitlist_signup"
                   />
+                  <span className="mt-1 block text-xs text-brand-gray">Lowercase only, use underscores between words.</span>
                 </label>
                 <label className="text-sm text-brand-gray">
                   <span className="mb-1 block">Template name</span>
