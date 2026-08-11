@@ -78,27 +78,34 @@ who want more bookings without more work.
 Label: Pricing
 Headline: Simple, transparent pricing. No surprises.
 
-Starter — £99/mo
-- AI receptionist on your website
-- Handles enquiries and FAQs
-- Email booking notifications
-- Up to 500 conversations/mo
+Essentials — £69/mo
+- 400 SMS and 2,000 WhatsApp messages / month (≈ 300 client conversations)
+- Inbound and outbound on both SMS and WhatsApp
+- Up to 3 outbound WhatsApp message templates
+- Booking reminders by SMS and WhatsApp
+- Booking confirmation emails
+- Calendar integration
+- Not included: AI voice — Essentials is text only
 
-Growth — £199/mo (Most popular)
-- Everything in Starter
-- Direct calendar booking integration
-- WhatsApp + phone line support
-- Automated appointment reminders
-- Up to 2,000 conversations/mo
+Growth — £179/mo (Most popular)
+- 750 SMS and 4,000 WhatsApp messages / month (≈ 590 client conversations)
+- 500 AI voice minutes / month
+- Everything in Essentials
+- AI voice receptionist
+- Unlimited outbound WhatsApp templates
+- No-show follow-ups
 
-Pro — £349/mo
+Custom — Let's talk (no published price)
 - Everything in Growth
-- Custom AI personality & tone
-- Multi-location support
-- Priority onboarding & support
-- Unlimited conversations
+- Allowances sized to actual volume
+- Email marketing — campaigns, newsletters, automated journeys
+- CRM — full client records, or synced with an existing CRM
+- Multi-location, custom AI personality, analytics
+- Dedicated account manager, SLA, white-glove setup
 
-Note: Waitlist members get 30% off their first 3 months.
+Note: allowances are per-channel and additive — clients get both SMS and
+WhatsApp, not one or the other. Yearly billing is 25% off.
+Founding offer: free setup (worth £499) + first month free, first 50 businesses.
 
 ### Final CTA
 Headline: Stop missing bookings. Start with Resevia.
