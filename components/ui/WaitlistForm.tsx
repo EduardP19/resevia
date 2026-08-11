@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from './Button';
 import Cookies from 'js-cookie';
+import { useAnalytics } from '@/components/analytics/AnalyticsProvider';
 import {
   TOTAL_FOUNDER_SPOTS,
   SIGNED_UP_COOKIE_KEY,
@@ -14,6 +15,7 @@ interface WaitlistFormProps {
 }
 
 export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
+  const { logEvent } = useAnalytics();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,13 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
       industry: formData.get('industry'),
       appointments_per_week: formData.get('appointments_per_week'),
     };
+    const analyticsMetadata = {
+      form_name: 'waitlist',
+      industry: data.industry,
+      appointments_per_week: data.appointments_per_week,
+    };
+
+    logEvent('WEBSITE_FORM_SUBMIT', analyticsMetadata);
 
     try {
       const res = await fetch('/api/waitlist', {
@@ -79,6 +88,10 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
         onSignupIncrement(newSignedUpCount);
       }
     } catch (err: any) {
+      logEvent('WEBSITE_FORM_SUBMIT_ERROR', {
+        ...analyticsMetadata,
+        error_message: err.message,
+      });
       setError(err.message);
     } finally {
       setLoading(false);

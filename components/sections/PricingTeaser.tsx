@@ -18,9 +18,9 @@ export function PricingTeaser() {
       features: [
         "500 SMS conversations / month included (≈ 50 client chats)",
         "Calendar integration — books directly into your existing system.",
-        "AI receptionist on your website chat",
-        "Handles enquiries, FAQs and pricing questions",
-        "Text-based conversations (SMS + website chat)",
+        // "AI receptionist on your website chat",
+        "Handles enquiries, FAQs, pricing questions and bookings",
+        "Text-based conversations (SMS)",
         "Booking link sharing (directs clients to your existing booking page)",
         "Email notifications for new enquiries",
         "SMS booking notifications",

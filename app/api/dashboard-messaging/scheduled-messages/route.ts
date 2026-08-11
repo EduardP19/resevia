@@ -8,6 +8,7 @@ type ScheduledMessagePayload = {
   recipient_name?: string | null;
   recipient_email?: string | null;
   recipient_phone?: string | null;
+  sending_source?: string | null;
   send_after?: string;
   param1?: string | null;
   param2?: string | null;
@@ -36,6 +37,7 @@ export async function GET() {
         recipient_name,
         recipient_email,
         recipient_phone,
+        sending_source,
         param1,
         param2,
         param3,
@@ -72,9 +74,14 @@ export async function POST(request: Request) {
     const recipientName = body.recipient_name?.trim() || null;
     const recipientEmail = body.recipient_email?.trim() || null;
     const recipientPhone = body.recipient_phone?.trim() || null;
+    const sendingSource = body.sending_source?.trim() || null;
 
     if (!channel || !templateId || !sendAfter) {
       return NextResponse.json({ error: "Channel, template, and send-after are required" }, { status: 400 });
+    }
+
+    if (!sendingSource) {
+      return NextResponse.json({ error: "Sending source is required" }, { status: 400 });
     }
 
     if (channel === "email" && !recipientEmail) {
@@ -101,6 +108,7 @@ export async function POST(request: Request) {
           recipient_name: recipientName,
           recipient_email: recipientEmail,
           recipient_phone: recipientPhone,
+          sending_source: sendingSource,
           send_after: parsedSendAfter.toISOString(),
           param1: body.param1?.trim() || null,
           param2: body.param2?.trim() || null,
@@ -124,6 +132,7 @@ export async function POST(request: Request) {
         recipient_name,
         recipient_email,
         recipient_phone,
+        sending_source,
         param1,
         param2,
         param3,

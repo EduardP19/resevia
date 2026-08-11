@@ -19,6 +19,7 @@ type ScheduledMessage = {
   recipient_name: string | null;
   recipient_email: string | null;
   recipient_phone: string | null;
+  sending_source: string | null;
   param1: string | null;
   param2: string | null;
   param3: string | null;
@@ -38,6 +39,7 @@ const emptyForm = {
   recipientName: "",
   recipientEmail: "",
   recipientPhone: "",
+  sendingSource: "",
   sendAfter: "",
   param1: "",
   param2: "",
@@ -126,6 +128,7 @@ export default function DashboardMessagesPage() {
           recipient_name: form.recipientName,
           recipient_email: form.recipientEmail,
           recipient_phone: form.recipientPhone,
+          sending_source: form.sendingSource,
           send_after: new Date(form.sendAfter).toISOString(),
           param1: form.param1,
           param2: form.param2,
@@ -266,6 +269,17 @@ export default function DashboardMessagesPage() {
                 </label>
               </div>
 
+              <label className="block text-sm text-brand-gray">
+                <span className="mb-1 block">Sending source</span>
+                <input
+                  value={form.sendingSource}
+                  onChange={(event) => setForm((current) => ({ ...current, sendingSource: event.target.value }))}
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
+                  placeholder={form.channel === "email" ? "notifications@resevia.co.uk" : "+447886083430"}
+                  required
+                />
+              </label>
+
               <div className="grid gap-3 sm:grid-cols-2">
                 {(["param1", "param2", "param3", "param4", "param5", "param6"] as const).map((key) => (
                   <label key={key} className="text-sm text-brand-gray">
@@ -324,6 +338,7 @@ export default function DashboardMessagesPage() {
                   <p className="text-sm text-brand-gray">
                     Recipient: {message.recipient_name || "Unknown"} / {message.recipient_email || message.recipient_phone || "No destination"}
                   </p>
+                  <p className="text-sm text-brand-gray">Source: {message.sending_source || "Not set"}</p>
                   <p className="text-sm text-brand-gray">Send after: {formatDate(message.send_after)}</p>
                   <p className="text-xs text-brand-gray">Attempts: {message.attempt_count}</p>
                   {message.last_error ? <p className="mt-2 text-sm text-red-700">Last error: {message.last_error}</p> : null}

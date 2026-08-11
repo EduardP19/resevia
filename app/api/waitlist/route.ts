@@ -44,11 +44,22 @@ export async function POST(request: Request) {
     const subject = renderTextTemplate(template.subject || '', { first_name });
     const text = renderTextTemplate(template.body_text || '', { first_name });
     const html = template.body_html ? renderHtmlTemplate(template.body_html, { first_name }) : null;
+    const { data: businessProfile, error: businessProfileError } = await admin
+      .from('business_profiles')
+      .select('email')
+      .limit(1)
+      .maybeSingle();
+
+    if (businessProfileError) {
+      console.error('Business profile email error:', businessProfileError);
+    }
+
+    const replyTo = businessProfile?.email || 'hello@resevia.co.uk';
 
     const { error: emailError } = await resend.emails.send({
       from: 'Resevia <hello@resevia.co.uk>',
       to: email,
-      replyTo: 'hello@resevia.co.uk',
+      replyTo,
       subject,
       text,
       ...(html ? { html } : {}),

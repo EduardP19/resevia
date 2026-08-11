@@ -268,6 +268,7 @@ CREATE TABLE IF NOT EXISTS public.scheduled_messages (
     recipient_name TEXT,
     recipient_email TEXT,
     recipient_phone TEXT,
+    sending_source TEXT,
     param1 TEXT,
     param2 TEXT,
     param3 TEXT,
