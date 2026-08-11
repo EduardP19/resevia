@@ -27,12 +27,16 @@ export default function PricingPage() {
               <p className="text-brand-gray">A: As one of the first 50 businesses, you receive priority support and early access to all future features.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What counts as a conversation?</h4>
-              <p className="text-brand-gray">A: Any interaction with a client — a message thread, a WhatsApp exchange, or a phone call. Multiple messages within a one-hour window count as a single conversation.</p>
+              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What counts as a message?</h4>
+              <p className="text-brand-gray">A: Every individual SMS or WhatsApp message sent or received on your behalf, including reminders and confirmations. A typical client conversation runs to around 8 messages, so the 2,400 messages on Essentials work out at roughly 300 conversations a month. Your dashboard tracks it live, so you always know where you stand.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-gray-100">
               <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What&apos;s included in my plan&apos;s allowance?</h4>
-              <p className="text-brand-gray">A: Each plan comes with a generous monthly allowance of SMS, WhatsApp and (on Growth and above) AI voice minutes — Essentials includes 500 SMS conversations, Growth includes 2,000 SMS/WhatsApp conversations plus 300 voice minutes, and Elite is fair-use unlimited. If you ever need more, extra usage is billed transparently at cost and we&apos;ll always flag it before you reach a limit.</p>
+              <p className="text-brand-gray">A: Each channel gets its own monthly allowance, and you get both. Essentials includes 400 SMS and 2,000 WhatsApp messages; Growth includes 750 SMS and 4,000 WhatsApp messages plus 500 AI voice minutes; Custom is sized to whatever volume you actually run. If you ever need more, extra usage is billed transparently at cost and we&apos;ll always flag it before you reach a limit.</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-gray-100">
+              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Does Essentials include AI voice calls?</h4>
+              <p className="text-brand-gray">A: No. Essentials is text only — SMS and WhatsApp. AI voice starts on Growth, which includes 500 voice minutes a month.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-gray-100">
               <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Can I upgrade or downgrade between plans?</h4>

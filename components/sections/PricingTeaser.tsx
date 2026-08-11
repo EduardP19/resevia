@@ -13,53 +13,52 @@ export function PricingTeaser() {
   const plans = [
     {
       name: "Essentials",
-      price: "£79",
+      price: "£69",
       description: "Perfect for small businesses getting started with AI reception.",
       features: [
-        "500 SMS conversations / month included (≈ 50 client chats)",
-        "Calendar integration — books directly into your existing system.",
-        // "AI receptionist on your website chat",
+        "400 SMS and 2,000 WhatsApp messages / month (≈ 300 client conversations)",
+        "Inbound and outbound on both SMS and WhatsApp",
+        "Up to 3 outbound WhatsApp message templates",
+        "Booking reminders sent by SMS and WhatsApp",
+        "Booking confirmation emails sent automatically",
+        "Calendar integration — books directly into your existing system",
         "Handles enquiries, FAQs, pricing questions and bookings",
-        "Text-based conversations (SMS)",
-        "Booking link sharing (directs clients to your existing booking page)",
-        "Email notifications for new enquiries",
-        "SMS booking notifications",
-        "Standard response time",
+        "Usage dashboard — see exactly what you've used, live",
         "Email support"
       ],
-      notIncluded: "Not included: AI voice calls, WhatsApp bookings, reminders"
+      notIncluded: "Not included: AI voice. Essentials is text only — SMS and WhatsApp."
     },
     {
       name: "Growth",
-      price: "£169",
+      price: "£179",
       popular: true,
       badge: "Most Popular",
       description: "The complete AI reception experience for growing businesses.",
       features: [
-        "2,000 SMS + WhatsApp conversations / month included",
-        "300 AI voice minutes / month included",
+        "750 SMS and 4,000 WhatsApp messages / month (≈ 590 client conversations)",
+        "500 AI voice minutes / month included",
         "Everything in Essentials",
         "AI voice receptionist — answers phone calls in your brand voice",
-        "WhatsApp Business integration — clients can book via WhatsApp",
+        "Unlimited outbound WhatsApp message templates",
         "Direct calendar booking — books straight into your system, no redirects",
-        "Automated appointment reminders via SMS and WhatsApp",
         "No-show follow-ups sent automatically",
         "Priority response time",
         "Chat and email support"
       ]
     },
     {
-      name: "Elite",
-      price: "£499",
-      elite: true,
-      badge: "For Power Users",
-      description: "Maximum capability for high-volume businesses and multi-location operators.",
+      name: "Custom",
+      price: "Let's talk",
+      custom: true,
+      badge: "Built Around You",
+      description: "Built around high-volume businesses and multi-location operators.",
       features: [
-        "Fair-use unlimited conversations & voice minutes",
+        "Message and voice allowances set to your actual volume",
         "Everything in Growth",
+        "Email marketing — campaigns, newsletters and automated client journeys",
+        "CRM — full client records, history and segmentation, or synced with the CRM you already use",
         "Multi-location support — one account, multiple branches",
         "Custom AI personality — fully bespoke tone, name and persona for your brand",
-        "CRM integration — syncs client data with your existing CRM",
         "Advanced analytics dashboard — conversation volume, booking rates, drop-off points",
         "Monthly strategy call with the Resevia team",
         "Dedicated account manager",
@@ -96,50 +95,57 @@ export function PricingTeaser() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-10">
           {plans.map((plan, i) => {
             const isPopular = plan.popular;
-            const isElite = (plan as any).elite;
+            const isCustom = (plan as any).custom;
 
             const basePrice = parseInt(plan.price.replace('£', ''));
-            const displayPrice = isAnnual ? `£${Math.round(basePrice * 0.75)}` : plan.price;
+            const hasNumericPrice = !Number.isNaN(basePrice);
+            const displayPrice = isAnnual && hasNumericPrice ? `£${Math.round(basePrice * 0.75)}` : plan.price;
 
             const cardContent = (
               <>
-                {(isPopular || isElite) && (
+                {(isPopular || isCustom) && (
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-max max-w-full">
                     <Badge className="px-4 py-1.5 bg-brand-gold text-brand-black tracking-wide font-bold shadow-md rounded-full border-none">
                       {plan.badge}
                     </Badge>
                   </div>
                 )}
-                <h3 className={`font-semibold text-xl mb-2 ${isElite ? 'text-white' : 'text-brand-black'}`}>{plan.name}</h3>
-                <p className={`text-sm mb-4 flex-none h-10 ${isElite ? 'text-gray-300' : 'text-brand-gray'}`}>{plan.description}</p>
+                <h3 className={`font-semibold text-xl mb-2 ${isCustom ? 'text-white' : 'text-brand-black'}`}>{plan.name}</h3>
+                <p className={`text-sm mb-4 flex-none h-10 ${isCustom ? 'text-gray-300' : 'text-brand-gray'}`}>{plan.description}</p>
 
                 <div className="mb-6">
-                  <span className={`text-4xl font-display font-bold block ${isElite ? 'text-white' : 'text-brand-black'}`}>{displayPrice}</span>
-                  <span className={`text-sm ${isElite ? 'text-gray-300' : 'text-brand-gray'}`}>/mo</span>
-                  {isAnnual && (
-                    <span className={`text-xs block mt-1 ${isElite ? 'text-gray-400' : 'text-gray-400'}`}>Billed annually</span>
+                  <span className={`text-4xl font-display font-bold block ${isCustom ? 'text-white' : 'text-brand-black'}`}>{displayPrice}</span>
+                  {hasNumericPrice ? (
+                    <>
+                      <span className={`text-sm ${isCustom ? 'text-gray-300' : 'text-brand-gray'}`}>/mo</span>
+                      {isAnnual && (
+                        <span className="text-xs block mt-1 text-gray-400">Billed annually</span>
+                      )}
+                    </>
+                  ) : (
+                    <span className={`text-sm ${isCustom ? 'text-gray-300' : 'text-brand-gray'}`}>Priced to your setup</span>
                   )}
                 </div>
 
                 <ul className="space-y-4 mb-8 flex-1">
                   {plan.features.map((feature, idx) => (
-                    <li key={idx} className={`flex items-start text-sm ${isElite ? 'text-gray-200' : 'text-brand-gray'}`}>
-                      <svg className={`w-5 h-5 mr-3 shrink-0 mt-0.5 ${isElite ? 'text-brand-gold' : 'text-green-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <li key={idx} className={`flex items-start text-sm ${isCustom ? 'text-gray-200' : 'text-brand-gray'}`}>
+                      <svg className={`w-5 h-5 mr-3 shrink-0 mt-0.5 ${isCustom ? 'text-brand-gold' : 'text-green-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       {feature}
                     </li>
                   ))}
                   {(plan as any).notIncluded && (
-                    <li className={`flex items-start text-sm italic mt-6 border-t pt-6 ${isElite ? 'text-gray-400 border-white/20' : 'text-gray-400 border-gray-100'}`}>
+                    <li className={`flex items-start text-sm italic mt-6 border-t pt-6 ${isCustom ? 'text-gray-400 border-white/20' : 'text-gray-400 border-gray-100'}`}>
                       {(plan as any).notIncluded}
                     </li>
                   )}
                 </ul>
 
                 <Link href="/waitlist" className="block mt-auto w-full relative z-20">
-                  <Button variant={isPopular ? 'primary' : isElite ? 'secondary' : 'secondary'} className={`w-full ${isElite ? 'bg-white text-brand-purple hover:bg-gray-100 border-none' : ''}`}>
-                    Join the Waitlist
+                  <Button variant={isPopular ? 'primary' : 'secondary'} className={`w-full ${isCustom ? 'bg-white text-brand-purple hover:bg-gray-100 border-none' : ''}`}>
+                    {isCustom ? 'Talk to us' : 'Join the Waitlist'}
                   </Button>
                 </Link>
               </>
@@ -171,7 +177,7 @@ export function PricingTeaser() {
                 ) : (
                   <Card
                     whileHover={{ y: -4, borderColor: "rgba(201,169,110,1)" }}
-                    className={`h-full flex flex-col relative w-full rounded-2xl ${isElite ? 'bg-[#6D28D9] border-transparent shadow-[0_10px_40px_rgba(109,40,217,0.3)]' : ''}`}
+                    className={`h-full flex flex-col relative w-full rounded-2xl ${isCustom ? 'bg-[#6D28D9] border-transparent shadow-[0_10px_40px_rgba(109,40,217,0.3)]' : ''}`}
                   >
                     {cardContent}
                   </Card>
@@ -180,10 +186,6 @@ export function PricingTeaser() {
             );
           })}
         </div>
-        <p className="text-center text-sm text-brand-gray max-w-3xl mx-auto mb-10">
-          Every plan includes generous monthly SMS, WhatsApp and voice allowances. Need more? Additional usage is simply billed at cost — and we&apos;ll always flag it before you hit a limit, so there are never any surprises.
-        </p>
-
         <div className="text-center bg-brand-gold/10 border border-brand-gold/30 p-8 rounded-2xl max-w-4xl mx-auto backdrop-blur-sm shadow-inner">
           <Badge className="bg-brand-gold text-brand-black mb-4 px-4 py-1.5 font-bold animate-bounce">FOUNDING SALON PILOT</Badge>
           <p className="text-brand-black font-display font-bold text-xl mb-2">First 50 salons join the pilot: free setup (worth £499) + first month completely free on any plan.</p>
