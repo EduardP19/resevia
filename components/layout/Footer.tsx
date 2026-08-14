@@ -62,9 +62,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-white/40">
-          <p>© 2026 Resevia. All rights reserved.</p>
-          <p className="text-center md:text-right">Resevia is a trading name of EMAGF LTD, registered in England &amp; Wales.</p>
+        <div className="border-t border-white/10 pt-8 mt-8 text-center text-sm text-white/40">
+          <p>© 2026 Resevia, a trading name of EMAGF LTD, registered in England &amp; Wales, company no. 12437054. All rights reserved.</p>
         </div>
       </div>
     </footer>
