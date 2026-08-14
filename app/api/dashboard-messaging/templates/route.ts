@@ -38,7 +38,7 @@ export async function GET() {
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
       .from("message_templates")
-      .select("id, created_at, updated_at, name, channel, subject, body_text, body_html, parameter_keys, description, is_active")
+      .select("id, created_at, updated_at, template_key, name, channel, subject, body_text, body_html, parameter_keys, description, is_active")
       .order("updated_at", { ascending: false });
 
     if (error) {
