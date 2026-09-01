@@ -7,7 +7,7 @@ type Template = {
   id: string;
   template_key: string | null;
   name: string;
-  channel: "email" | "sms";
+  channel: "email" | "sms" | "whatsapp";
   subject: string | null;
   body_text: string;
   body_html: string | null;
@@ -20,7 +20,7 @@ type Template = {
 const emptyForm = {
   templateKey: "",
   name: "",
-  channel: "email" as "email" | "sms",
+  channel: "email" as "email" | "sms" | "whatsapp",
   subject: "",
   parameterKeys: "name,email,phone",
   description: "",
@@ -34,7 +34,7 @@ function formatDate(iso: string) {
 }
 
 function templatePreviewHtml(template: Template) {
-  if (template.channel === "sms") {
+  if (template.channel !== "email") {
     return `<!doctype html><html><head><meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <style>
@@ -191,7 +191,7 @@ export default function DashboardTemplatesPage() {
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-2 font-display text-3xl font-bold text-brand-black">Message Templates</h1>
         <p className="mb-6 max-w-3xl text-sm text-brand-gray">
-          Create reusable SMS and email templates with placeholders. Email templates are HTML-first, with plain text derived automatically for fallback.
+          Create reusable email, SMS, and WhatsApp templates with placeholders. Email templates are HTML-first, with plain text derived automatically for fallback.
         </p>
         <DashboardNav />
 
@@ -229,15 +229,16 @@ export default function DashboardTemplatesPage() {
                     onChange={(event) =>
                       setForm((current) => ({
                         ...current,
-                        channel: event.target.value as "email" | "sms",
-                        subject: event.target.value === "sms" ? "" : current.subject,
-                        bodyHtml: event.target.value === "sms" ? "" : current.bodyHtml,
+                        channel: event.target.value as "email" | "sms" | "whatsapp",
+                        subject: event.target.value === "email" ? current.subject : "",
+                        bodyHtml: event.target.value === "email" ? current.bodyHtml : "",
                       }))
                     }
                     className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
                   >
                     <option value="email">Email</option>
                     <option value="sms">SMS</option>
+                    <option value="whatsapp">WhatsApp</option>
                   </select>
                 </label>
               </div>
@@ -288,7 +289,7 @@ export default function DashboardTemplatesPage() {
                 </label>
               ) : null}
 
-              {form.channel === "sms" ? (
+              {form.channel !== "email" ? (
                 <label className="block text-sm text-brand-gray">
                   <span className="mb-1 block">Text body</span>
                   <textarea
@@ -335,7 +336,11 @@ export default function DashboardTemplatesPage() {
                 >
                   <div className="mb-3 flex flex-wrap items-center gap-2">
                     <h3 className="text-base font-semibold text-brand-black">
-                      {template.channel === "email" ? "Email template " : "SMS template "}
+                      {template.channel === "email"
+                        ? "Email template "
+                        : template.channel === "whatsapp"
+                          ? "WhatsApp template "
+                          : "SMS template "}
                       {template.name}
                     </h3>
                     {template.template_key ? (

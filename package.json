@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "blog:context": "node scripts/blog-context.mjs",
     "start": "next start",
     "lint": "next lint"
   },

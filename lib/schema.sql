@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS public.message_templates (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT now() NOT NULL,
-    template_key TEXT UNIQUE,
+    template_key TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
-    channel TEXT NOT NULL CHECK (channel IN ('email', 'sms')),
+    channel TEXT NOT NULL CHECK (channel IN ('email', 'sms', 'whatsapp')),
     subject TEXT,
     body_text TEXT NOT NULL,
     body_html TEXT,
@@ -81,9 +81,10 @@ CREATE TABLE IF NOT EXISTS public.message_templates (
     metadata JSONB DEFAULT '{}'::jsonb NOT NULL,
     UNIQUE (name, channel),
     UNIQUE (id, channel),
+    UNIQUE (template_key, channel),
     CONSTRAINT message_templates_subject_check CHECK (
         (channel = 'email' AND subject IS NOT NULL AND btrim(subject) <> '')
-        OR (channel = 'sms' AND subject IS NULL)
+        OR (channel IN ('sms', 'whatsapp') AND subject IS NULL)
     )
 );
 
@@ -262,19 +263,14 @@ CREATE TABLE IF NOT EXISTS public.scheduled_messages (
     sent_at TIMESTAMPTZ,
     claimed_at TIMESTAMPTZ,
     status TEXT DEFAULT 'pending' NOT NULL CHECK (status IN ('pending', 'processing', 'sent', 'failed', 'cancelled')),
-    channel TEXT NOT NULL CHECK (channel IN ('email', 'sms')),
-    template_id UUID NOT NULL,
+    channel TEXT NOT NULL CHECK (channel IN ('email', 'sms', 'whatsapp')),
+    template_key TEXT NOT NULL,
     campaign_name TEXT,
     recipient_name TEXT,
     recipient_email TEXT,
     recipient_phone TEXT,
     sending_source TEXT,
-    param1 TEXT,
-    param2 TEXT,
-    param3 TEXT,
-    param4 TEXT,
-    param5 TEXT,
-    param6 TEXT,
+    subject_override TEXT,
     template_params JSONB DEFAULT '{}'::jsonb NOT NULL,
     attempt_count INTEGER DEFAULT 0 NOT NULL CHECK (attempt_count >= 0),
     claimed_by TEXT,
@@ -282,12 +278,12 @@ CREATE TABLE IF NOT EXISTS public.scheduled_messages (
     last_error TEXT,
     metadata JSONB DEFAULT '{}'::jsonb NOT NULL,
     CONSTRAINT scheduled_messages_template_fkey
-        FOREIGN KEY (template_id, channel)
-        REFERENCES public.message_templates(id, channel)
+        FOREIGN KEY (template_key, channel)
+        REFERENCES public.message_templates(template_key, channel)
         ON DELETE RESTRICT,
     CONSTRAINT scheduled_messages_recipient_check CHECK (
         (channel = 'email' AND recipient_email IS NOT NULL AND btrim(recipient_email) <> '')
-        OR (channel = 'sms' AND recipient_phone IS NOT NULL AND btrim(recipient_phone) <> '')
+        OR (channel IN ('sms', 'whatsapp') AND recipient_phone IS NOT NULL AND btrim(recipient_phone) <> '')
     )
 );
 
@@ -358,4 +354,4 @@ CREATE INDEX IF NOT EXISTS idx_message_templates_channel_active ON public.messag
 CREATE INDEX IF NOT EXISTS idx_scheduled_messages_due_pending
     ON public.scheduled_messages(send_after, id)
     WHERE status = 'pending';
-CREATE INDEX IF NOT EXISTS idx_scheduled_messages_template_id ON public.scheduled_messages(template_id);
+CREATE INDEX IF NOT EXISTS idx_scheduled_messages_template_key ON public.scheduled_messages(template_key);

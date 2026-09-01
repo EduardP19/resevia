@@ -5,8 +5,9 @@ import { DashboardNav } from "@/components/dashboard/DashboardNav";
 
 type Template = {
   id: string;
+  template_key: string;
   name: string;
-  channel: "email" | "sms";
+  channel: "email" | "sms" | "whatsapp";
   parameter_keys: string[];
 };
 
@@ -14,39 +15,30 @@ type ScheduledMessage = {
   id: string;
   send_after: string;
   status: string;
-  channel: "email" | "sms";
+  channel: "email" | "sms" | "whatsapp";
   campaign_name: string | null;
   recipient_name: string | null;
   recipient_email: string | null;
   recipient_phone: string | null;
   sending_source: string | null;
-  param1: string | null;
-  param2: string | null;
-  param3: string | null;
-  param4: string | null;
-  param5: string | null;
-  param6: string | null;
+  subject_override: string | null;
   template_params: Record<string, string>;
   attempt_count: number;
   last_error: string | null;
+  template_key: string;
   message_templates: { name: string } | { name: string }[] | null;
 };
 
 const emptyForm = {
-  channel: "email" as "email" | "sms",
-  templateId: "",
+  channel: "email" as "email" | "sms" | "whatsapp",
+  templateKey: "",
   campaignName: "",
   recipientName: "",
   recipientEmail: "",
   recipientPhone: "",
   sendingSource: "",
+  subjectOverride: "",
   sendAfter: "",
-  param1: "",
-  param2: "",
-  param3: "",
-  param4: "",
-  param5: "",
-  param6: "",
   namedParams: '{\n  "name": "",\n  "booking_link": ""\n}',
 };
 
@@ -74,10 +66,10 @@ export default function DashboardMessagesPage() {
   );
 
   useEffect(() => {
-    if (!form.templateId && channelTemplates[0]) {
-      setForm((current) => ({ ...current, templateId: channelTemplates[0].id }));
+    if (!form.templateKey && channelTemplates[0]) {
+      setForm((current) => ({ ...current, templateKey: channelTemplates[0].template_key }));
     }
-  }, [channelTemplates, form.templateId]);
+  }, [channelTemplates, form.templateKey]);
 
   async function loadData() {
     setLoading(true);
@@ -123,19 +115,14 @@ export default function DashboardMessagesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           channel: form.channel,
-          template_id: form.templateId,
+          template_key: form.templateKey,
           campaign_name: form.campaignName,
           recipient_name: form.recipientName,
           recipient_email: form.recipientEmail,
           recipient_phone: form.recipientPhone,
           sending_source: form.sendingSource,
+          subject_override: form.subjectOverride,
           send_after: new Date(form.sendAfter).toISOString(),
-          param1: form.param1,
-          param2: form.param2,
-          param3: form.param3,
-          param4: form.param4,
-          param5: form.param5,
-          param6: form.param6,
           template_params: parsedParams,
         }),
       });
@@ -148,7 +135,7 @@ export default function DashboardMessagesPage() {
       setForm((current) => ({
         ...emptyForm,
         channel: current.channel,
-        templateId: channelTemplates[0]?.id ?? "",
+        templateKey: channelTemplates[0]?.template_key ?? "",
       }));
       await loadData();
     } catch (err) {
@@ -169,7 +156,7 @@ export default function DashboardMessagesPage() {
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-2 font-display text-3xl font-bold text-brand-black">Scheduled Messages</h1>
         <p className="mb-6 max-w-3xl text-sm text-brand-gray">
-          Queue future email and SMS sends against your templates. The cron worker can claim due rows in batches of 50 and send them through the appropriate provider.
+          Queue future email, SMS, and WhatsApp sends against your templates. The cron worker can claim due rows in batches of 50 and send them through the appropriate provider.
         </p>
         <DashboardNav />
 
@@ -185,9 +172,9 @@ export default function DashboardMessagesPage() {
                     onChange={(event) =>
                       setForm((current) => ({
                         ...current,
-                        channel: event.target.value as "email" | "sms",
-                        templateId: "",
-                        recipientEmail: event.target.value === "sms" ? "" : current.recipientEmail,
+                        channel: event.target.value as "email" | "sms" | "whatsapp",
+                        templateKey: "",
+                        recipientEmail: event.target.value === "email" ? current.recipientEmail : "",
                         recipientPhone: event.target.value === "email" ? "" : current.recipientPhone,
                       }))
                     }
@@ -195,19 +182,20 @@ export default function DashboardMessagesPage() {
                   >
                     <option value="email">Email</option>
                     <option value="sms">SMS</option>
+                    <option value="whatsapp">WhatsApp</option>
                   </select>
                 </label>
                 <label className="text-sm text-brand-gray">
                   <span className="mb-1 block">Template</span>
                   <select
-                    value={form.templateId}
-                    onChange={(event) => setForm((current) => ({ ...current, templateId: event.target.value }))}
+                    value={form.templateKey}
+                    onChange={(event) => setForm((current) => ({ ...current, templateKey: event.target.value }))}
                     className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
                     required
                   >
                     <option value="">Select template</option>
                     {channelTemplates.map((template) => (
-                      <option key={template.id} value={template.id}>
+                      <option key={template.id} value={template.template_key}>
                         {template.name}
                       </option>
                     ))}
@@ -275,26 +263,31 @@ export default function DashboardMessagesPage() {
                   value={form.sendingSource}
                   onChange={(event) => setForm((current) => ({ ...current, sendingSource: event.target.value }))}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
-                  placeholder={form.channel === "email" ? "notifications@resevia.co.uk" : "+447886083430"}
+                  placeholder={
+                    form.channel === "email"
+                      ? "notifications@resevia.co.uk"
+                      : form.channel === "whatsapp"
+                        ? "+447886083430 (Twilio WhatsApp sender)"
+                        : "+447886083430"
+                  }
                   required
                 />
               </label>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                {(["param1", "param2", "param3", "param4", "param5", "param6"] as const).map((key) => (
-                  <label key={key} className="text-sm text-brand-gray">
-                    <span className="mb-1 block">{key.toUpperCase()}</span>
-                    <input
-                      value={form[key]}
-                      onChange={(event) => setForm((current) => ({ ...current, [key]: event.target.value }))}
-                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
-                    />
-                  </label>
-                ))}
-              </div>
+              {form.channel === "email" ? (
+                <label className="block text-sm text-brand-gray">
+                  <span className="mb-1 block">Subject override (optional)</span>
+                  <input
+                    value={form.subjectOverride}
+                    onChange={(event) => setForm((current) => ({ ...current, subjectOverride: event.target.value }))}
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-brand-black outline-none focus:border-brand-black"
+                    placeholder="Leave blank to use the template's subject"
+                  />
+                </label>
+              ) : null}
 
               <label className="block text-sm text-brand-gray">
-                <span className="mb-1 block">Named params JSON</span>
+                <span className="mb-1 block">Template params JSON</span>
                 <textarea
                   value={form.namedParams}
                   onChange={(event) => setForm((current) => ({ ...current, namedParams: event.target.value }))}
@@ -339,18 +332,15 @@ export default function DashboardMessagesPage() {
                     Recipient: {message.recipient_name || "Unknown"} / {message.recipient_email || message.recipient_phone || "No destination"}
                   </p>
                   <p className="text-sm text-brand-gray">Source: {message.sending_source || "Not set"}</p>
+                  {message.subject_override ? (
+                    <p className="text-sm text-brand-gray">Subject override: {message.subject_override}</p>
+                  ) : null}
                   <p className="text-sm text-brand-gray">Send after: {formatDate(message.send_after)}</p>
                   <p className="text-xs text-brand-gray">Attempts: {message.attempt_count}</p>
                   {message.last_error ? <p className="mt-2 text-sm text-red-700">Last error: {message.last_error}</p> : null}
-                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
-                    <div className="rounded-xl bg-slate-50 p-3 text-xs text-brand-gray">
-                      <p className="mb-2 font-semibold uppercase tracking-wide">Params 1-6</p>
-                      <p>{[message.param1, message.param2, message.param3, message.param4, message.param5, message.param6].filter(Boolean).join(" | ") || "None"}</p>
-                    </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-xs text-brand-gray">
-                      <p className="mb-2 font-semibold uppercase tracking-wide">Named params</p>
-                      <pre className="whitespace-pre-wrap">{JSON.stringify(message.template_params ?? {}, null, 2)}</pre>
-                    </div>
+                  <div className="mt-3 rounded-xl bg-slate-50 p-3 text-xs text-brand-gray">
+                    <p className="mb-2 font-semibold uppercase tracking-wide">Template params</p>
+                    <pre className="whitespace-pre-wrap">{JSON.stringify(message.template_params ?? {}, null, 2)}</pre>
                   </div>
                 </article>
               ))}

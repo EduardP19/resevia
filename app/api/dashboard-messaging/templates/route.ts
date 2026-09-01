@@ -4,7 +4,7 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 type TemplatePayload = {
   template_key?: string | null;
   name?: string;
-  channel?: "email" | "sms";
+  channel?: "email" | "sms" | "whatsapp";
   subject?: string | null;
   body_text?: string | null;
   body_html?: string | null;
@@ -55,8 +55,10 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as TemplatePayload;
-    const templateKey = body.template_key ? normalizeTemplateKey(body.template_key) || null : null;
     const name = body.name?.trim();
+    // template_key is required (scheduled_messages references templates by
+    // it), so fall back to deriving one from the name when not supplied.
+    const templateKey = normalizeTemplateKey(body.template_key?.trim() || name || "") || null;
     const channel = body.channel;
     const subject = body.subject?.trim() || null;
     const bodyText = body.body_text?.trim() || null;
@@ -70,20 +72,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name and channel are required" }, { status: 400 });
     }
 
+    if (!templateKey) {
+      return NextResponse.json({ error: "Could not derive a template key from the name" }, { status: 400 });
+    }
+
     if (channel === "email" && !subject) {
       return NextResponse.json({ error: "Email templates require a subject" }, { status: 400 });
     }
 
-    if (channel === "sms" && subject) {
-      return NextResponse.json({ error: "SMS templates cannot have a subject" }, { status: 400 });
+    if (channel !== "email" && subject) {
+      return NextResponse.json({ error: "SMS and WhatsApp templates cannot have a subject" }, { status: 400 });
     }
 
     if (channel === "email" && !bodyHtml && !bodyText) {
       return NextResponse.json({ error: "Email templates need HTML or text content" }, { status: 400 });
     }
 
-    if (channel === "sms" && !bodyText) {
-      return NextResponse.json({ error: "SMS templates require text content" }, { status: 400 });
+    if (channel !== "email" && !bodyText) {
+      return NextResponse.json({ error: "SMS and WhatsApp templates require text content" }, { status: 400 });
     }
 
     const resolvedBodyText =
