@@ -1,0 +1,1 @@
+ALTER TABLE public.logs ADD COLUMN IF NOT EXISTS utm_first TEXT;

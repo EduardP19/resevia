@@ -11,6 +11,13 @@ interface AnalyticsContextType {
   stampuser: string | undefined;
 }
 
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+type UtmKey = (typeof UTM_KEYS)[number];
+const UTM_SESSION_COOKIE = 'utm_session';
+const UTM_FIRST_COOKIE = 'utm_first';
+// Browsers cap cookie lifetime (~400 days), so this is effectively "as long as allowed".
+const UTM_FIRST_EXPIRY_DAYS = 3650;
+
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
 export const useAnalytics = () => {
@@ -35,14 +42,34 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return user;
   }, []);
 
+  // UTMs persist for the browser session (session cookie, no expiry). New UTMs in the URL replace them.
+  // utm_first is the first-ever utm_source and is never overwritten.
   const getUTMs = useCallback(() => {
-    return {
-      utm_source: searchParams.get('utm_source')?.toUpperCase() || searchParams.get('UTM_SOURCE'),
-      utm_medium: searchParams.get('utm_medium')?.toUpperCase() || searchParams.get('UTM_MEDIUM'),
-      utm_campaign: searchParams.get('utm_campaign')?.toUpperCase() || searchParams.get('UTM_CAMPAIGN'),
-      utm_content: searchParams.get('utm_content')?.toUpperCase() || searchParams.get('UTM_CONTENT'),
-      utm_term: searchParams.get('utm_term')?.toUpperCase() || searchParams.get('UTM_TERM'),
-    };
+    const fromUrl = Object.fromEntries(
+      UTM_KEYS.map((key) => {
+        const value = searchParams.get(key) || searchParams.get(key.toUpperCase());
+        return [key, value ? value.toUpperCase() : null];
+      })
+    ) as Record<UtmKey, string | null>;
+
+    let utms = fromUrl;
+    if (UTM_KEYS.some((key) => fromUrl[key])) {
+      Cookies.set(UTM_SESSION_COOKIE, JSON.stringify(fromUrl));
+    } else {
+      try {
+        utms = { ...fromUrl, ...JSON.parse(Cookies.get(UTM_SESSION_COOKIE) || '{}') };
+      } catch {
+        // ignore malformed cookie
+      }
+    }
+
+    let utm_first = Cookies.get(UTM_FIRST_COOKIE) || null;
+    if (!utm_first && utms.utm_source) {
+      utm_first = utms.utm_source;
+      Cookies.set(UTM_FIRST_COOKIE, utm_first, { expires: UTM_FIRST_EXPIRY_DAYS });
+    }
+
+    return { ...utms, utm_first };
   }, [searchParams]);
 
   const logEvent = useCallback(async (eventType: string, metadata: any = {}) => {

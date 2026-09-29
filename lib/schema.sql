@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.logs (
     utm_campaign TEXT,
     utm_content TEXT,
     utm_term TEXT,
+    utm_first TEXT,
     metadata JSONB DEFAULT '{}'::jsonb
 );
 
