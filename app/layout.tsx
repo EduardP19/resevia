@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Inter } from "next/font/google";
 import { Suspense } from "react";
 import Script from 'next/script';
@@ -10,8 +10,21 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  title: "Resevia — Your AI Receptionist",
-  description: "Resevia handles calls, bookings and enquiries 24/7",
+  metadataBase: new URL("https://resevia.co.uk"),
+  title: "Resevia — The AI Receptionist for Salons, Clinics & Booking Businesses",
+  description: "Every call answered. Every booking captured. Resevia answers calls, replies on SMS and WhatsApp, and books appointments 24/7 for salons, clinics and every business that runs on bookings.",
+  openGraph: {
+    title: "Resevia — Every call answered. Every booking captured.",
+    description: "The AI receptionist for salons, clinics and every business that runs on bookings. Test the agent live.",
+    url: "https://resevia.co.uk",
+    siteName: "Resevia",
+    locale: "en_GB",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0C0A1D",
 };
 
 export default function RootLayout({
@@ -28,8 +41,8 @@ export default function RootLayout({
         "@id": `${siteUrl}/#organization`,
         "name": "Resevia",
         "url": siteUrl,
-        "logo": `${siteUrl}/ReseviaLogo.png`,
-        "description": "Your AI receptionist. Always ready. Resevia handles calls, bookings and enquiries 24/7 for beauty salons, aesthetic clinics and dental practices.",
+        "logo": `${siteUrl}/logo.svg`,
+        "description": "Your AI receptionist. Always ready. Resevia handles calls, bookings and enquiries 24/7 for beauty salons, aesthetic clinics, dental practices and other appointment-based businesses.",
         "email": "hello@resevia.co.uk",
         "areaServed": {
           "@type": "Country",

@@ -99,7 +99,7 @@ export default async function BlogPostPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
-      <main className="flex-grow pt-28 pb-24 px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-36 pb-24 px-4 sm:px-6 lg:px-8">
         <article className="max-w-3xl mx-auto">
           <Link href="/blog" className="text-sm font-semibold text-brand-purple hover:underline">
             ← All articles

@@ -5,7 +5,7 @@ export default function TermsAndConditionsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-light">
       <Navbar />
-      <main className="flex-grow py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+      <main className="flex-grow pt-36 pb-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
         <h1 className="text-4xl md:text-5xl font-display font-bold text-brand-black mb-8">Terms and Conditions</h1>
         
         <div className="prose prose-brand-purple max-w-none text-brand-gray text-lg space-y-8">
