@@ -49,7 +49,7 @@ export default function HowItWorksPage() {
             </div>
             <div>
               <h4 className="font-semibold text-brand-black text-lg">Q: What booking systems does Resevia work with?</h4>
-              <p className="text-brand-gray">A: Fresha, Treatwell, Timely, Google Calendar and more.</p>
+              <p className="text-brand-gray">A: Fresha, Timely, Google Calendar and more.</p>
             </div>
             <div>
               <h4 className="font-semibold text-brand-black text-lg">Q: Can I customise how my receptionist sounds?</h4>
