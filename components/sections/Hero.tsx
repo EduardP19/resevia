@@ -281,7 +281,7 @@ function HeroPhone() {
 }
 
 function ChannelStrip() {
-  const items = ['SMS', 'WhatsApp', 'AI Voice', 'Google Calendar', 'Cal.com', 'Fresha', 'Treatwell', 'Timely', 'Phorest', 'Missed-call text-back', 'Reminders', 'Owner alerts'];
+  const items = ['SMS', 'WhatsApp', 'AI Voice', 'Google Calendar', 'Cal.com', 'Fresha', 'Timely', 'Phorest', 'Missed-call text-back', 'Reminders', 'Owner alerts'];
   return (
     <div className="relative mt-20 border-y border-white/[0.06] bg-white/[0.015] py-5">
       <p className="sr-only">Channels and integrations</p>

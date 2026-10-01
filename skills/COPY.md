@@ -154,7 +154,7 @@ Q: Do I need to be technical?
 A: Not at all. We handle the setup.
 
 Q: What booking systems does Resevia work with?
-A: Fresha, Treatwell, Timely, Google Calendar and more.
+A: Fresha, Timely, Google Calendar and more.
 
 Q: Can I customise how my receptionist sounds?
 A: Yes. We match your brand tone exactly.

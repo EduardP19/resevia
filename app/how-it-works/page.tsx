@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const FAQS = [
   { q: 'Do I need to be technical?', a: 'Not at all. We handle the setup.' },
-  { q: 'What booking systems does Resevia work with?', a: 'Fresha, Treatwell, Timely, Google Calendar and more.' },
+  { q: 'What booking systems does Resevia work with?', a: 'Fresha, Timely, Google Calendar and more.' },
   { q: 'Can I customise how my receptionist sounds?', a: 'Yes. We match your brand tone exactly — name, personality and the way it greets clients.' },
   { q: 'What if a client asks something the AI can’t handle?', a: 'Resevia escalates to you via notification, and you can take over the conversation from your inbox.' },
   { q: 'Do you keep improving it after launch?', a: 'Yes. Every month we review performance, update services, and improve responses based on real conversations.' },

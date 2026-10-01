@@ -11,7 +11,7 @@ export type FaqItem = { q: string; a: string };
 export const HOME_FAQS: FaqItem[] = [
   { q: 'Will clients know they’re talking to AI?', a: 'Your receptionist has its own name and speaks in your brand voice. It’s transparent if a client asks, and hands over to you whenever someone wants a person.' },
   { q: 'Which businesses is Resevia for?', a: 'Any business that runs on appointments — hair and beauty salons, barbers, aesthetic and private clinics, dental practices, physio and wellness, vets, gyms and PT studios, and more.' },
-  { q: 'What booking systems does it work with?', a: 'Resevia books directly into your calendar and works alongside tools like Fresha, Treatwell, Timely, Phorest and Google Calendar. Tell us what you use during onboarding.' },
+  { q: 'What booking systems does it work with?', a: 'Resevia books directly into your calendar and works alongside tools like Fresha, Timely, Phorest and Google Calendar. Tell us what you use during onboarding.' },
   { q: 'What if a client asks something the AI can’t handle?', a: 'It hands over. You get an alert, the conversation appears in your inbox, and you can take over mid-thread. For clinics it never gives medical advice and flags urgent cases straight away.' },
   { q: 'Can I check replies before they go out?', a: 'Yes. Turn on approval mode and every reply waits as a draft until you approve or edit it. Switch to autonomous whenever you’re comfortable.' },
   { q: 'Do I need to be technical?', a: 'Not at all. Setup is white-glove — you fill in one form and we do the rest. Most businesses are live within 48 hours.' },
