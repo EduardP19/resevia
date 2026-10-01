@@ -69,7 +69,10 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/60 sm:text-xl lg:mx-0"
           >
-            The AI receptionist for your <RotatingWord words={ROTATING_NOUNS} />. It answers calls, replies on SMS and WhatsApp, and books clients straight into your diary — 24/7.
+            <span className="block">
+              The AI receptionist for your <RotatingWord words={ROTATING_NOUNS.map((w) => `${w}.`)} />
+            </span>
+            <span className="mt-1 block">It answers calls, replies on SMS and WhatsApp, and books clients straight into your diary — 24/7.</span>
           </motion.p>
 
           <motion.div
@@ -126,20 +129,30 @@ function RotatingWord({ words }: { words: string[] }) {
     const t = setInterval(() => setI((n) => (n + 1) % words.length), 2200);
     return () => clearInterval(t);
   }, [words.length]);
+  // Every word is stacked invisibly in the same grid cell, so the slot is
+  // always as wide as the longest word. The paragraph never re-wraps when
+  // the word changes, so nothing below it jumps.
   return (
-    <span className="relative inline-flex overflow-hidden align-bottom">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
-          key={words[i]}
-          initial={{ y: '100%', opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: '-100%', opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="font-semibold text-white"
-        >
-          {words[i]}
-        </motion.span>
-      </AnimatePresence>
+    <span className="relative inline-grid whitespace-nowrap align-bottom">
+      {words.map((w) => (
+        <span key={w} aria-hidden className="invisible col-start-1 row-start-1 font-semibold">
+          {w}
+        </span>
+      ))}
+      <span className="col-start-1 row-start-1 overflow-hidden text-center lg:text-left">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={words[i]}
+            initial={{ y: '100%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: '-100%', opacity: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-block font-semibold text-white"
+          >
+            {words[i]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
     </span>
   );
 }
