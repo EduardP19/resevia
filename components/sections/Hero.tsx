@@ -174,7 +174,7 @@ function HeroPhone() {
 
       {/* Floating chips */}
       <motion.div
-        className="absolute -left-4 top-24 z-20 hidden rounded-2xl border border-white/10 bg-[#171230]/90 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-left-16"
+        className="absolute -left-4 top-24 z-[9999] hidden rounded-2xl border border-white/10 bg-[#171230]/90 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-left-16"
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -182,7 +182,7 @@ function HeroPhone() {
         <p className="font-display text-xl font-bold text-white">4 sec</p>
       </motion.div>
       <motion.div
-        className="absolute -right-4 bottom-32 z-20 hidden rounded-2xl border border-emerald-400/30 bg-[#0f2a22]/90 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-right-14"
+        className="absolute -right-4 bottom-32 z-[9999] hidden rounded-2xl border border-emerald-400/30 bg-[#0f2a22]/90 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-right-14"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -193,7 +193,7 @@ function HeroPhone() {
       </motion.div>
 
       <div className="rounded-[2.8rem] border border-white/15 bg-gradient-to-b from-[#221a3d] to-[#0b0917] p-2.5 shadow-[0_50px_120px_-20px_rgba(109,40,217,0.6)]">
-        <div className="relative h-[500px] overflow-hidden rounded-[2.3rem] sm:h-[560px] bg-[#EFE7DE]">
+        <div className="relative isolate h-[500px] overflow-hidden rounded-[2.3rem] sm:h-[560px] bg-[#EFE7DE]">
           <div className="absolute left-1/2 top-2.5 z-30 h-6 w-24 -translate-x-1/2 rounded-full bg-black" />
 
           {/* WhatsApp chrome */}
