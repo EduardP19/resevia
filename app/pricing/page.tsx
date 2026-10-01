@@ -1,10 +1,36 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PricingTeaser } from '@/components/sections/PricingTeaser';
 
+export const metadata: Metadata = {
+  title: 'AI Receptionist Pricing: Essentials, Growth & Custom | Resevia',
+  description: 'Simple Resevia pricing for salons and clinics. Plans include SMS, WhatsApp and AI voice allowances, setup and support. Founding members get free setup.',
+  alternates: { canonical: 'https://resevia.co.uk/pricing' },
+  openGraph: { title: 'AI Receptionist Pricing: Essentials, Growth & Custom | Resevia', description: 'Simple Resevia pricing for salons and clinics. Plans include SMS, WhatsApp and AI voice allowances, setup and support. Founding members get free setup.', url: 'https://resevia.co.uk/pricing', type: 'website' },
+};
+
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'What\'s included in my plan\'s allowance?', acceptedAnswer: { '@type': 'Answer', text: 'Each channel gets its own monthly allowance, and you get both. Essentials includes 400 SMS and 2,000 WhatsApp messages; Growth includes 750 SMS and 4,000 WhatsApp messages plus 500 AI voice minutes; Custom is sized to whatever volume you actually run.' } },
+    { '@type': 'Question', name: 'What counts as a message?', acceptedAnswer: { '@type': 'Answer', text: 'Every individual SMS or WhatsApp message sent or received on your behalf, including reminders and confirmations. A typical client conversation runs to around 8 messages, so the 2,400 messages on Essentials work out at roughly 300 conversations a month. Your dashboard tracks it live, so you always know where you stand.' } },
+    { '@type': 'Question', name: 'What happens if I go over my allowance?', acceptedAnswer: { '@type': 'Answer', text: 'Nothing stops working. Extra usage is billed transparently at cost, and we\'ll always flag it before you reach a limit — so there are never any surprises. If you\'re regularly going over, we\'ll suggest moving you up a plan rather than letting you pay overage every month.' } },
+    { '@type': 'Question', name: 'Does Essentials include AI voice calls?', acceptedAnswer: { '@type': 'Answer', text: 'No. Essentials is text only — SMS and WhatsApp. AI voice starts on Growth, which includes 500 voice minutes a month.' } },
+    { '@type': 'Question', name: 'How many WhatsApp templates do I get?', acceptedAnswer: { '@type': 'Answer', text: 'Essentials includes up to 3 outbound WhatsApp templates — enough for reminders, confirmations and follow-ups. Growth and Custom are unlimited. Templates are the pre-approved messages WhatsApp requires for anything you send first; replies within an open conversation aren\'t templated.' } },
+    { '@type': 'Question', name: 'How is Custom priced?', acceptedAnswer: { '@type': 'Answer', text: 'On your actual volume and the features you need, so there\'s no fixed monthly figure to publish. Tell us roughly how many enquiries and calls you handle and how many locations you run, and we\'ll come back with a number.' } },
+    { '@type': 'Question', name: 'Can I upgrade or downgrade between plans?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. You can change your plan at any time from your dashboard. Changes take effect on your next billing date.' } },
+    { '@type': 'Question', name: 'Is there a setup fee?', acceptedAnswer: { '@type': 'Answer', text: 'Normally yes (£499). But for our first 50 founding members, we waive it completely.' } },
+    { '@type': 'Question', name: 'Is there a free trial?', acceptedAnswer: { '@type': 'Answer', text: 'Yes! Founding members get their entire first month free.' } },
+    { '@type': 'Question', name: 'What does the founding member status mean?', acceptedAnswer: { '@type': 'Answer', text: 'As one of the first 50 businesses, you receive priority support and early access to all future features.' } },
+  ],
+};
+
 export default function PricingPage() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-light">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
       <Navbar />
       <main className="flex-grow pt-8 pb-24">
         <PricingTeaser />

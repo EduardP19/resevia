@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Resevia',
+  description: 'How Resevia collects, uses and protects your personal data.',
+  alternates: { canonical: 'https://resevia.co.uk/privacy-policy' },
+  openGraph: { title: 'Privacy Policy | Resevia', description: 'How Resevia collects, uses and protects your personal data.', url: 'https://resevia.co.uk/privacy-policy', type: 'website' },
+};
+
 
 export default function PrivacyPolicyPage() {
   return (

@@ -1,9 +1,29 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+
+export const metadata: Metadata = {
+  title: 'How Resevia Works: Live in Under an Hour | Resevia',
+  description: 'See how Resevia sets up your AI receptionist in 24–48 hours: onboarding, training, go-live on WhatsApp, SMS, phone and web chat, then monthly optimisation.',
+  alternates: { canonical: 'https://resevia.co.uk/how-it-works' },
+  openGraph: { title: 'How Resevia Works: Live in Under an Hour | Resevia', description: 'See how Resevia sets up your AI receptionist in 24–48 hours: onboarding, training, go-live on WhatsApp, SMS, phone and web chat, then monthly optimisation.', url: 'https://resevia.co.uk/how-it-works', type: 'website' },
+};
+
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Do I need to be technical?', acceptedAnswer: { '@type': 'Answer', text: 'Not at all. We handle the setup.' } },
+    { '@type': 'Question', name: 'What booking systems does Resevia work with?', acceptedAnswer: { '@type': 'Answer', text: 'Fresha, Timely, Google Calendar and more.' } },
+    { '@type': 'Question', name: 'Can I customise how my receptionist sounds?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. We match your brand tone exactly.' } },
+    { '@type': 'Question', name: 'What if a client asks something the AI can\'t handle?', acceptedAnswer: { '@type': 'Answer', text: 'Resevia escalates to you via notification.' } },
+  ],
+};
 
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-light">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
       <Navbar />
       <main className="flex-grow py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
         <h1 className="text-4xl md:text-5xl font-display font-bold text-brand-black mb-6">From setup to live in under an hour.</h1>

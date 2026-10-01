@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+
+export const metadata: Metadata = {
+  title: 'AI Receptionist for Salons, Clinics, Dentists & Gyms | Resevia',
+  description: 'Resevia automates bookings, enquiries and reminders for beauty salons, dental clinics, medspas, gyms and vets. 24/7, in your brand voice.',
+  alternates: { canonical: 'https://resevia.co.uk/industries' },
+  openGraph: { title: 'AI Receptionist for Salons, Clinics, Dentists & Gyms | Resevia', description: 'Resevia automates bookings, enquiries and reminders for beauty salons, dental clinics, medspas, gyms and vets. 24/7, in your brand voice.', url: 'https://resevia.co.uk/industries', type: 'website' },
+};
+
 
 export default function IndustriesPage() {
   return (

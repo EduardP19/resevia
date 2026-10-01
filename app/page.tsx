@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
@@ -9,6 +10,14 @@ import { SocialProof } from '@/components/sections/SocialProof';
 import { Reviews } from '@/components/sections/Reviews';
 import { PricingTeaser } from '@/components/sections/PricingTeaser';
 import { FinalCTA } from '@/components/sections/FinalCTA';
+
+export const metadata: Metadata = {
+  title: 'Resevia: AI Receptionist for Salons & Clinics (WhatsApp, SMS & Voice)',
+  description: 'Resevia answers calls, WhatsApp and SMS 24/7, books appointments and sends reminders for UK salons, aesthetic clinics and dental practices.',
+  alternates: { canonical: 'https://resevia.co.uk/' },
+  openGraph: { title: 'Resevia: AI Receptionist for Salons & Clinics (WhatsApp, SMS & Voice)', description: 'Resevia answers calls, WhatsApp and SMS 24/7, books appointments and sends reminders for UK salons, aesthetic clinics and dental practices.', url: 'https://resevia.co.uk', type: 'website' },
+};
+
 
 export default function Home() {
   return (

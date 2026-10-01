@@ -10,8 +10,16 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-display' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://resevia.co.uk"),
   title: "Resevia — Your AI Receptionist",
   description: "Resevia handles calls, bookings and enquiries 24/7",
+  openGraph: {
+    siteName: "Resevia",
+    locale: "en_GB",
+    type: "website",
+    images: [{ url: "/ReseviaLogo.png", alt: "Resevia" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/ReseviaLogo.png"] },
 };
 
 export default function RootLayout({

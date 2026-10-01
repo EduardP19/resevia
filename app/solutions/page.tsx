@@ -14,6 +14,13 @@ export const metadata: Metadata = {
   description:
     'Everything Resevia automates for salons, clinics and dental practices: AI receptionist, WhatsApp automation and booking, AI phone answering, missed-call text-back and reminders.',
   alternates: { canonical: `${SITE_URL}/solutions` },
+  openGraph: {
+    title: 'AI Receptionist, WhatsApp Booking & Automation | Resevia',
+    description:
+      'Everything Resevia automates for salons, clinics and dental practices: AI receptionist, WhatsApp automation and booking, AI phone answering, missed-call text-back and reminders.',
+    url: `${SITE_URL}/solutions`,
+    type: 'website',
+  },
 };
 
 export default function SolutionsPage() {
