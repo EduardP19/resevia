@@ -15,7 +15,6 @@ import { INDUSTRIES, type Industry } from '@/lib/industries';
 import { demoRespond, INITIAL_DEMO_STATE, type DemoState, type ToolEvent } from '@/lib/demo-agent';
 import { Icon } from '@/components/ui/Icons';
 import { useAnalytics } from '@/components/analytics/AnalyticsProvider';
-import { AGENT_SANDBOX_URL } from '@/lib/site';
 
 type Channel = 'sms' | 'whatsapp' | 'voice';
 type Msg = { id: number; role: 'user' | 'agent'; text: string };
@@ -417,10 +416,6 @@ export function AgentPlayground({ compact = false }: { compact?: boolean }) {
             )}
           </div>
 
-          <a href={AGENT_SANDBOX_URL} target="_blank" rel="noreferrer" className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-white/70 transition-colors hover:border-brand-gold/40 hover:text-white">
-            Open the full sandbox (with approval mode)
-            <Icon name="arrowRight" className="h-4 w-4 text-brand-gold transition-transform group-hover:translate-x-1" />
-          </a>
         </div>
       )}
     </div>

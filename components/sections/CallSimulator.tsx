@@ -137,10 +137,11 @@ export function CallSimulator() {
               </div>
 
               <div className="relative mt-8">
-                <div className="absolute bottom-3 left-[19px] top-3 w-px bg-white/10" />
+                {/* Track runs centre-to-centre of the first and last circle (h-10 → 20px inset). */}
+                <div className="absolute bottom-5 left-[19px] top-5 w-px bg-white/10" />
                 <motion.div
-                  className="absolute left-[19px] top-3 w-px bg-gradient-to-b from-brand-gold to-emerald-400"
-                  animate={{ height: shown ? `${((shown - 1) / Math.max(1, steps.length - 1)) * 100}%` : 0 }}
+                  className="absolute left-[19px] top-5 w-px bg-gradient-to-b from-brand-gold to-emerald-400"
+                  animate={{ height: shown > 1 ? `calc(${((shown - 1) / Math.max(1, steps.length - 1)) * 100}% - ${((shown - 1) / Math.max(1, steps.length - 1)) * 40}px)` : 0 }}
                   transition={{ duration: 0.6 }}
                 />
                 <ol className="space-y-5">
@@ -148,6 +149,8 @@ export function CallSimulator() {
                     const on = i < shown;
                     return (
                       <li key={s.title} className="relative flex gap-4">
+                        {/* Opaque base so the track never shows through the tinted circle. */}
+                        <div className="relative z-10 h-10 w-10 shrink-0 rounded-full bg-[#15111f]">
                         <motion.div
                           animate={{ scale: on ? 1 : 0.85, opacity: on ? 1 : 0.35 }}
                           className={clsx(
@@ -155,11 +158,12 @@ export function CallSimulator() {
                             on && s.tone === 'green' && 'border-emerald-400/60 bg-emerald-400/15 text-emerald-300',
                             on && s.tone === 'gold' && 'border-brand-gold/60 bg-brand-gold/15 text-brand-gold',
                             on && s.tone === 'neutral' && 'border-white/30 bg-white/10 text-white',
-                            !on && 'border-white/10 bg-[#0C0A1D] text-white/40'
+                            !on && 'border-white/10 bg-[#15111f] text-white/40'
                           )}
                         >
                           {on && s.tone === 'green' ? <Icon name="check" className="h-4 w-4" /> : i + 1}
                         </motion.div>
+                        </div>
                         <motion.div animate={{ opacity: on ? 1 : 0.3, x: on ? 0 : -6 }} className="min-w-0 pt-1">
                           <p className="flex flex-wrap items-center gap-2 font-semibold text-white">
                             {s.title}
