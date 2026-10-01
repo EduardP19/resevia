@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useCallback } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,7 +30,6 @@ export const useAnalytics = () => {
 
 export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   // Get or create stampuser
   const getStampUser = useCallback(() => {
@@ -44,7 +43,11 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // UTMs persist for the browser session (session cookie, no expiry). New UTMs in the URL replace them.
   // utm_first is the first-ever utm_source and is never overwritten.
+  // Read from window.location at event time rather than useSearchParams(): that hook
+  // forces the whole tree under this provider to client-side rendering, which strips
+  // all page content from the server-rendered HTML (bad for SEO and AI crawlers).
   const getUTMs = useCallback(() => {
+    const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     const fromUrl = Object.fromEntries(
       UTM_KEYS.map((key) => {
         const value = searchParams.get(key) || searchParams.get(key.toUpperCase());
@@ -70,7 +73,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     return { ...utms, utm_first };
-  }, [searchParams]);
+  }, []);
 
   const logEvent = useCallback(async (eventType: string, metadata: any = {}) => {
     try {

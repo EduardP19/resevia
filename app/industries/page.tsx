@@ -7,6 +7,7 @@ import { DemoSection } from '@/components/sections/DemoSection';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 import { Icon } from '@/components/ui/Icons';
 import { INDUSTRIES } from '@/lib/industries';
+import { industryPageHref } from '@/content/industryPages';
 
 export const metadata: Metadata = {
   title: 'Industries — Resevia AI Receptionist',
@@ -59,7 +60,10 @@ export default function IndustriesPage() {
                     ))}
                   </ul>
                 </div>
-                <div className="mt-6 flex flex-wrap gap-2">
+                <Link href={industryPageHref(ind.id)} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-purple hover:underline">
+                  See how it works for {ind.name.toLowerCase()} <Icon name="arrowRight" className="h-4 w-4" />
+                </Link>
+                <div className="mt-4 flex flex-wrap gap-2">
                   {ind.demo.services.map((s) => (
                     <span key={s.name} className="rounded-full bg-brand-light px-3 py-1 text-xs font-medium text-brand-purple">{s.name}</span>
                   ))}

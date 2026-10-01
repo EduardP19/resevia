@@ -17,10 +17,10 @@ const COLUMNS = [
   {
     title: 'Industries',
     links: [
-      { href: '/industries#hair', label: 'Hair & barbers' },
-      { href: '/industries#beauty', label: 'Beauty & nails' },
-      { href: '/industries#aesthetics', label: 'Aesthetic clinics' },
-      { href: '/industries#dental', label: 'Dental practices' },
+      { href: '/industries/hair-salons-barbers', label: 'Hair & barbers' },
+      { href: '/industries/beauty-salons-nail-bars', label: 'Beauty & nails' },
+      { href: '/industries/aesthetic-clinics', label: 'Aesthetic clinics' },
+      { href: '/industries/dental-practices', label: 'Dental practices' },
       { href: '/industries', label: 'All industries' },
     ],
   },
@@ -83,7 +83,7 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Oversized wordmark */}
+        {/* Oversized wordmark. The inner overlap lines (variable-font contours showing through the stroke) are intentional — keep. */}
         <div aria-hidden className="pointer-events-none mt-16 select-none text-center font-display text-[22vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-transparent md:text-[13rem]" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.08)' }}>
           resevia
         </div>

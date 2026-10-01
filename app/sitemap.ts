@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getPublishedPosts } from '@/lib/blog';
 import { SOLUTIONS } from '@/content/solutions';
+import { INDUSTRY_PAGES } from '@/content/industryPages';
 
 const SITE_URL = 'https://resevia.co.uk';
 
@@ -13,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/solutions',
     ...SOLUTIONS.map((s) => `/solutions/${s.slug}`),
     '/industries',
+    ...INDUSTRY_PAGES.map((p) => `/industries/${p.slug}`),
     '/pricing',
     '/blog',
     '/waitlist',
@@ -22,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${SITE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: path === '' || path === '/blog' ? 'weekly' : 'monthly',
-    priority: path === '' ? 1 : path === '/pricing' || path === '/blog' || path.startsWith('/solutions') ? 0.8 : 0.6,
+    priority: path === '' ? 1 : path === '/pricing' || path === '/blog' || path.startsWith('/solutions') || path.startsWith('/industries/') ? 0.8 : 0.6,
   }));
 
   const posts = await getPublishedPosts();

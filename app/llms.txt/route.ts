@@ -1,4 +1,6 @@
 import { SOLUTIONS } from '@/content/solutions';
+import { INDUSTRY_PAGES } from '@/content/industryPages';
+import { INDUSTRIES } from '@/lib/industries';
 
 const SITE_URL = 'https://resevia.co.uk';
 
@@ -11,6 +13,9 @@ export function GET() {
 
 ## Solutions
 ${SOLUTIONS.map((s) => `- [${s.name}](${SITE_URL}/solutions/${s.slug}): ${s.summary}`).join('\n')}
+
+## Industries
+${INDUSTRY_PAGES.map((p) => `- [${INDUSTRIES.find((i) => i.id === p.id)?.name}](${SITE_URL}/industries/${p.slug}): ${p.description}`).join('\n')}
 
 ## Key pages
 - [Solutions overview](${SITE_URL}/solutions): everything Resevia automates

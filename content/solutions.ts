@@ -21,6 +21,16 @@ export interface Solution {
   faqs: SolutionFaq[];
   /** Slugs of related spokes, used for internal linking */
   related: string[];
+  /** When set, the page ends with a lead-capture form instead of the waitlist CTA */
+  leadMagnet?: {
+    /** Identifies the form in /api/leads and analytics */
+    source: string;
+    eyebrow: string;
+    heading: string;
+    body: string;
+    bullets: string[];
+    cta: string;
+  };
 }
 
 export const SOLUTIONS: Solution[] = [
@@ -91,6 +101,18 @@ export const SOLUTIONS: Solution[] = [
       { q: 'How many WhatsApp messages are included?', a: 'Essentials includes 2,000 WhatsApp messages a month and Growth includes 4,000. See the pricing page for details.' },
     ],
     related: ['whatsapp-booking', 'appointment-reminders', 'ai-receptionist'],
+    leadMagnet: {
+      source: 'whatsapp-automation-audit',
+      eyebrow: 'Free WhatsApp automation audit',
+      heading: 'Get a free WhatsApp automation plan for your business',
+      body: 'Tell us how you use WhatsApp today. We’ll review it and email you a personalised plan within 2 working days. No cost, no obligation.',
+      bullets: [
+        'Which of your enquiries can be automated, and which should stay human',
+        'Which WhatsApp templates you need for reminders, confirmations and follow-ups',
+        'A suggested booking flow for your services and calendar',
+      ],
+      cta: 'Get my free audit',
+    },
   },
   {
     slug: 'whatsapp-booking',

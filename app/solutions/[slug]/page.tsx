@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { PageHero } from '@/components/sections/PageHero';
+import { LeadMagnetForm } from '@/components/ui/LeadMagnetForm';
+import { Icon } from '@/components/ui/Icons';
 import { Card } from '@/components/ui/Card';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 import { JsonLd } from '@/components/solutions/SolutionJsonLd';
@@ -65,27 +68,29 @@ export default function SolutionPage({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-light">
+    <div className="flex min-h-screen flex-col bg-brand-light">
       <JsonLd data={jsonLd} />
       <Navbar />
-      <main className="flex-grow pt-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav aria-label="Breadcrumb" className="text-sm text-brand-gray mb-6">
+      <main className="flex-grow">
+        <PageHero eyebrow={s.name} title={s.h1} subtitle={s.intro}>
+          <div className="mt-10 flex justify-center">
+            <Link
+              href={s.leadMagnet ? '#get-audit' : '/waitlist'}
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-purple px-7 py-4 font-semibold text-white shadow-[0_12px_30px_-10px_rgba(109,40,217,0.7)] transition-colors hover:bg-brand-purple-mid"
+            >
+              {s.leadMagnet ? s.leadMagnet.cta : 'Join the waitlist'} <Icon name="arrowRight" className="h-4 w-4" />
+            </Link>
+          </div>
+        </PageHero>
+
+        <div className="mx-auto max-w-4xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
+          <nav aria-label="Breadcrumb" className="mb-4 text-sm text-brand-gray">
             <Link href="/" className="hover:text-brand-purple">Home</Link>
             <span className="mx-2">/</span>
             <Link href="/solutions" className="hover:text-brand-purple">Solutions</Link>
             <span className="mx-2">/</span>
             <span className="text-brand-black">{s.name}</span>
           </nav>
-
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-brand-black mb-6">{s.h1}</h1>
-          <p className="text-xl text-brand-gray mb-8">{s.intro}</p>
-          <Link
-            href="/waitlist"
-            className="inline-flex items-center justify-center font-medium rounded-lg px-8 py-4 text-lg bg-brand-purple text-white hover:bg-brand-purple/90 transition-colors"
-          >
-            Join the waitlist
-          </Link>
 
           <section className="mt-20">
             <h2 className="text-3xl font-display font-bold text-brand-black mb-4">{s.problem.heading}</h2>
@@ -158,7 +163,27 @@ export default function SolutionPage({ params }: { params: { slug: string } }) {
             </div>
           </section>
         </div>
-        <FinalCTA />
+        {s.leadMagnet ? (
+          <section id="get-audit" className="scroll-mt-24 bg-white py-20 sm:py-24">
+            <div className="mx-auto grid max-w-6xl items-start gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
+              <div>
+                <span className="eyebrow-light">{s.leadMagnet.eyebrow}</span>
+                <h2 className="mt-4 font-display text-3xl font-bold text-brand-black sm:text-4xl">{s.leadMagnet.heading}</h2>
+                <p className="mt-4 text-lg text-brand-gray">{s.leadMagnet.body}</p>
+                <ul className="mt-6 space-y-3">
+                  {s.leadMagnet.bullets.map((b) => (
+                    <li key={b} className="flex gap-3 text-brand-black"><Icon name="check" className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />{b}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-gray-100 bg-brand-light p-6 sm:p-8">
+                <LeadMagnetForm source={s.leadMagnet.source} submitLabel={s.leadMagnet.cta} />
+              </div>
+            </div>
+          </section>
+        ) : (
+          <FinalCTA />
+        )}
       </main>
       <Footer />
     </div>
