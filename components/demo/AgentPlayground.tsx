@@ -292,13 +292,15 @@ export function AgentPlayground({ compact = false }: { compact?: boolean }) {
             <div className="relative flex h-[600px] flex-col overflow-hidden rounded-[2.2rem] sm:h-[620px]">
               <PhoneHeader channel={channel} industry={industry} isLive={isLive} speaking={speaking} typing={typing} callSeconds={callSeconds} muted={muted} onToggleMute={() => { setMuted((m) => !m); window.speechSynthesis?.cancel(); }} onReset={reset} />
 
+              {channel === 'voice' && <VoiceOrb speaking={speaking} listening={listening} typing={typing} />}
+
               <div
                 ref={scrollRef}
                 className={clsx(
                   'flex-1 space-y-2.5 overflow-y-auto px-3.5 py-4',
                   channel === 'sms' && 'bg-white',
                   channel === 'whatsapp' && 'bg-[#EFE7DE]',
-                  channel === 'voice' && 'bg-gradient-to-b from-[#1a1233] to-[#0c0a1d]'
+                  channel === 'voice' && 'bg-gradient-to-b from-[#1a1233] to-[#0c0a1d] [mask-image:linear-gradient(to_bottom,transparent,black_24px)]'
                 )}
                 style={channel === 'whatsapp' ? { backgroundImage: 'radial-gradient(rgba(0,0,0,0.035) 1px, transparent 1px)', backgroundSize: '14px 14px' } : undefined}
               >
@@ -307,7 +309,6 @@ export function AgentPlayground({ compact = false }: { compact?: boolean }) {
                     🔒 Messages are end-to-end encrypted.
                   </div>
                 )}
-                {channel === 'voice' && <VoiceOrb speaking={speaking} listening={listening} typing={typing} />}
                 <AnimatePresence initial={false}>
                   {messages.map((m) => (
                     <Bubble key={m.id} msg={m} channel={channel} />
@@ -534,7 +535,7 @@ function TypingBubble({ channel, name }: { channel: Channel; name: string }) {
 function VoiceOrb({ speaking, listening, typing }: { speaking: boolean; listening: boolean; typing: boolean }) {
   const active = speaking || listening || typing;
   return (
-    <div className="sticky top-0 z-10 -mx-3.5 -mt-4 mb-3 flex h-36 items-center justify-center bg-gradient-to-b from-[#1a1233] via-[#1a1233]/95 to-transparent">
+    <div className="flex h-32 shrink-0 items-center justify-center bg-[#1a1233]">
       <div className="relative flex h-24 w-24 items-center justify-center">
         {[0, 1, 2].map((i) => (
           <motion.span
