@@ -116,7 +116,7 @@ export function PricingTeaser() {
             const dark = plan.custom;
 
             return (
-              <Reveal key={plan.name} delay={i * 0.08} className={clsx(plan.popular && 'lg:-mt-4')}>
+              <Reveal key={plan.name} delay={i * 0.08}>
                 <div className={clsx('relative rounded-[2rem]', plan.popular && 'bg-gradient-to-b from-brand-gold via-[#F5E6C4] to-brand-gold p-[1.5px] shadow-[0_40px_80px_-30px_rgba(201,169,110,0.6)]')}>
                   <div
                     className={clsx(
