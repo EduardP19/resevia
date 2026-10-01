@@ -63,7 +63,7 @@ export default async function BlogIndexPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
       />
-      <main className="flex-grow pt-28 pb-24 px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-36 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <header className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-brand-purple font-semibold tracking-wide uppercase text-sm mb-3 block">

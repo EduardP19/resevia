@@ -128,7 +128,7 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
           id="first_name"
           name="first_name"
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-[16px] text-brand-black transition-shadow focus:border-brand-purple focus:outline-none focus:ring-4 focus:ring-brand-purple/15 sm:text-sm"
           placeholder="First Name"
         />
       </div>
@@ -139,7 +139,7 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
           id="email"
           name="email"
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-[16px] text-brand-black transition-shadow focus:border-brand-purple focus:outline-none focus:ring-4 focus:ring-brand-purple/15 sm:text-sm"
           placeholder="hello@example.com"
         />
       </div>
@@ -149,12 +149,15 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
           id="industry"
           name="industry"
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple bg-white"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-[16px] text-brand-black transition-shadow focus:border-brand-purple focus:outline-none focus:ring-4 focus:ring-brand-purple/15 sm:text-sm bg-white"
         >
           <option value="">Select an industry</option>
           <option value="Beauty/Hair Salon">Beauty / Hair Salon</option>
+          <option value="Barbershop">Barbershop</option>
+          <option value="Aesthetic Clinic">Aesthetic Clinic</option>
           <option value="Dental Clinic">Dental Clinic</option>
           <option value="Private Clinic/Medspa">Private Clinic / Medspa</option>
+          <option value="Physio/Wellness/Spa">Physio, Wellness &amp; Spa</option>
           <option value="Gym/PT">Gym & PT Studios</option>
           <option value="Veterinary">Veterinary Practices</option>
           <option value="Other">Other</option>
@@ -166,7 +169,7 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
           id="appointments_per_week"
           name="appointments_per_week"
           required
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-purple bg-white"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-[16px] text-brand-black transition-shadow focus:border-brand-purple focus:outline-none focus:ring-4 focus:ring-brand-purple/15 sm:text-sm bg-white"
         >
           <option value="">Select volume</option>
           <option value="0-50">0 - 50</option>
@@ -178,7 +181,7 @@ export function WaitlistForm({ onSignupIncrement }: WaitlistFormProps = {}) {
 
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
-      <Button type="submit" className="w-full" size="lg" disabled={loading}>
+      <Button type="submit" className="w-full rounded-xl py-4 font-bold shadow-[0_12px_30px_-10px_rgba(109,40,217,0.7)]" size="lg" disabled={loading}>
         {loading ? 'Submitting...' : 'Secure My Spot'}
       </Button>
       <p className="text-center text-xs text-brand-gray mt-2">No spam. No credit card. Just early access.</p>

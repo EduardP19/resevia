@@ -2,86 +2,48 @@ import type { Metadata } from 'next';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PricingTeaser } from '@/components/sections/PricingTeaser';
+import { RevenueCalculator } from '@/components/sections/RevenueCalculator';
+import { FAQ } from '@/components/sections/FAQ';
+import { FinalCTA } from '@/components/sections/FinalCTA';
 
 export const metadata: Metadata = {
-  title: 'AI Receptionist Pricing: Essentials, Growth & Custom | Resevia',
-  description: 'Simple Resevia pricing for salons and clinics. Plans include SMS, WhatsApp and AI voice allowances, setup and support. Founding members get free setup.',
+  title: 'Pricing — Resevia AI Receptionist',
+  description: 'Simple, transparent pricing for your AI receptionist. Essentials from £69/month, Growth with AI voice from £179/month. Founding offer: free setup + first month free.',
   alternates: { canonical: 'https://resevia.co.uk/pricing' },
-  openGraph: { title: 'AI Receptionist Pricing: Essentials, Growth & Custom | Resevia', description: 'Simple Resevia pricing for salons and clinics. Plans include SMS, WhatsApp and AI voice allowances, setup and support. Founding members get free setup.', url: 'https://resevia.co.uk/pricing', type: 'website' },
+  openGraph: { title: 'Pricing — Resevia AI Receptionist', description: 'Simple, transparent pricing for your AI receptionist. Essentials from £69/month, Growth with AI voice from £179/month. Founding offer: free setup + first month free.', url: 'https://resevia.co.uk/pricing', type: 'website' },
 };
+
+const FAQS = [
+  { q: "What\u2019s included in my plan\u2019s allowance?", a: "Each channel gets its own monthly allowance, and you get both. Essentials includes 400 SMS and 2,000 WhatsApp messages; Growth includes 750 SMS and 4,000 WhatsApp messages plus 500 AI voice minutes; Custom is sized to whatever volume you actually run." },
+  { q: "What counts as a message?", a: "Every individual SMS or WhatsApp message sent or received on your behalf, including reminders and confirmations. A typical client conversation runs to around 8 messages, so the 2,400 messages on Essentials work out at roughly 300 conversations a month. Your dashboard tracks it live, so you always know where you stand." },
+  { q: "What happens if I go over my allowance?", a: "Nothing stops working. Extra usage is billed transparently at cost, and we\u2019ll always flag it before you reach a limit \u2014 so there are never any surprises. If you\u2019re regularly going over, we\u2019ll suggest moving you up a plan rather than letting you pay overage every month." },
+  { q: "Does Essentials include AI voice calls?", a: "No. Essentials is text only \u2014 SMS and WhatsApp. AI voice starts on Growth, which includes 500 voice minutes a month." },
+  { q: "How many WhatsApp templates do I get?", a: "Essentials includes up to 3 outbound WhatsApp templates \u2014 enough for reminders, confirmations and follow-ups. Growth and Custom are unlimited. Templates are the pre-approved messages WhatsApp requires for anything you send first; replies within an open conversation aren\u2019t templated." },
+  { q: "How is Custom priced?", a: "On your actual volume and the features you need, so there\u2019s no fixed monthly figure to publish. Tell us roughly how many enquiries and calls you handle and how many locations you run, and we\u2019ll come back with a number." },
+  { q: "Can I upgrade or downgrade between plans?", a: "Yes. You can change your plan at any time from your dashboard. Changes take effect on your next billing date." },
+  { q: "Is there a setup fee?", a: "Normally yes (\u00a3499). But for our first 50 founding members, we waive it completely." },
+  { q: "Is there a free trial?", a: "Yes! Founding members get their entire first month free." },
+  { q: "What does the founding member status mean?", a: "As one of the first 50 businesses, you receive priority support and early access to all future features." },
+];
 
 const FAQ_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    { '@type': 'Question', name: 'What\'s included in my plan\'s allowance?', acceptedAnswer: { '@type': 'Answer', text: 'Each channel gets its own monthly allowance, and you get both. Essentials includes 400 SMS and 2,000 WhatsApp messages; Growth includes 750 SMS and 4,000 WhatsApp messages plus 500 AI voice minutes; Custom is sized to whatever volume you actually run.' } },
-    { '@type': 'Question', name: 'What counts as a message?', acceptedAnswer: { '@type': 'Answer', text: 'Every individual SMS or WhatsApp message sent or received on your behalf, including reminders and confirmations. A typical client conversation runs to around 8 messages, so the 2,400 messages on Essentials work out at roughly 300 conversations a month. Your dashboard tracks it live, so you always know where you stand.' } },
-    { '@type': 'Question', name: 'What happens if I go over my allowance?', acceptedAnswer: { '@type': 'Answer', text: 'Nothing stops working. Extra usage is billed transparently at cost, and we\'ll always flag it before you reach a limit — so there are never any surprises. If you\'re regularly going over, we\'ll suggest moving you up a plan rather than letting you pay overage every month.' } },
-    { '@type': 'Question', name: 'Does Essentials include AI voice calls?', acceptedAnswer: { '@type': 'Answer', text: 'No. Essentials is text only — SMS and WhatsApp. AI voice starts on Growth, which includes 500 voice minutes a month.' } },
-    { '@type': 'Question', name: 'How many WhatsApp templates do I get?', acceptedAnswer: { '@type': 'Answer', text: 'Essentials includes up to 3 outbound WhatsApp templates — enough for reminders, confirmations and follow-ups. Growth and Custom are unlimited. Templates are the pre-approved messages WhatsApp requires for anything you send first; replies within an open conversation aren\'t templated.' } },
-    { '@type': 'Question', name: 'How is Custom priced?', acceptedAnswer: { '@type': 'Answer', text: 'On your actual volume and the features you need, so there\'s no fixed monthly figure to publish. Tell us roughly how many enquiries and calls you handle and how many locations you run, and we\'ll come back with a number.' } },
-    { '@type': 'Question', name: 'Can I upgrade or downgrade between plans?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. You can change your plan at any time from your dashboard. Changes take effect on your next billing date.' } },
-    { '@type': 'Question', name: 'Is there a setup fee?', acceptedAnswer: { '@type': 'Answer', text: 'Normally yes (£499). But for our first 50 founding members, we waive it completely.' } },
-    { '@type': 'Question', name: 'Is there a free trial?', acceptedAnswer: { '@type': 'Answer', text: 'Yes! Founding members get their entire first month free.' } },
-    { '@type': 'Question', name: 'What does the founding member status mean?', acceptedAnswer: { '@type': 'Answer', text: 'As one of the first 50 businesses, you receive priority support and early access to all future features.' } },
-  ],
+  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-brand-light">
+    <div className="flex min-h-screen flex-col bg-brand-light">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
       <Navbar />
-      <main className="flex-grow pt-8 pb-24">
+      <main className="flex-grow">
+        <div className="bg-brand-light pt-16" />
         <PricingTeaser />
-
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-          <p className="text-center text-lg text-brand-gray mb-16">All plans include setup, training and ongoing support.</p>
-
-          <h2 className="text-3xl font-display font-bold text-brand-black mb-8 text-center">FAQs</h2>
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What&apos;s included in my plan&apos;s allowance?</h4>
-              <p className="text-brand-gray">A: Each channel gets its own monthly allowance, and you get both. Essentials includes 400 SMS and 2,000 WhatsApp messages; Growth includes 750 SMS and 4,000 WhatsApp messages plus 500 AI voice minutes; Custom is sized to whatever volume you actually run.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What counts as a message?</h4>
-              <p className="text-brand-gray">A: Every individual SMS or WhatsApp message sent or received on your behalf, including reminders and confirmations. A typical client conversation runs to around 8 messages, so the 2,400 messages on Essentials work out at roughly 300 conversations a month. Your dashboard tracks it live, so you always know where you stand.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What happens if I go over my allowance?</h4>
-              <p className="text-brand-gray">A: Nothing stops working. Extra usage is billed transparently at cost, and we&apos;ll always flag it before you reach a limit — so there are never any surprises. If you&apos;re regularly going over, we&apos;ll suggest moving you up a plan rather than letting you pay overage every month.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Does Essentials include AI voice calls?</h4>
-              <p className="text-brand-gray">A: No. Essentials is text only — SMS and WhatsApp. AI voice starts on Growth, which includes 500 voice minutes a month.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: How many WhatsApp templates do I get?</h4>
-              <p className="text-brand-gray">A: Essentials includes up to 3 outbound WhatsApp templates — enough for reminders, confirmations and follow-ups. Growth and Custom are unlimited. Templates are the pre-approved messages WhatsApp requires for anything you send first; replies within an open conversation aren&apos;t templated.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: How is Custom priced?</h4>
-              <p className="text-brand-gray">A: On your actual volume and the features you need, so there&apos;s no fixed monthly figure to publish. Tell us roughly how many enquiries and calls you handle and how many locations you run, and we&apos;ll come back with a number.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Can I upgrade or downgrade between plans?</h4>
-              <p className="text-brand-gray">A: Yes. You can change your plan at any time from your dashboard. Changes take effect on your next billing date.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Is there a setup fee?</h4>
-              <p className="text-brand-gray">A: Normally yes (£499). But for our first 50 founding members, we waive it completely.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: Is there a free trial?</h4>
-              <p className="text-brand-gray">A: Yes! Founding members get their entire first month free.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-100">
-              <h4 className="font-semibold text-brand-black text-lg mb-2">Q: What does the founding member status mean?</h4>
-              <p className="text-brand-gray">A: As one of the first 50 businesses, you receive priority support and early access to all future features.</p>
-            </div>
-          </div>
-        </div>
+        <p className="bg-brand-light pb-16 text-center text-lg text-brand-gray">All plans include setup, training and ongoing support.</p>
+        <RevenueCalculator />
+        <FAQ items={FAQS} title={<>Pricing <span className="text-purple-gold">FAQs.</span></>} />
+        <FinalCTA />
       </main>
       <Footer />
     </div>
