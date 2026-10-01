@@ -51,17 +51,21 @@
   .glass-dark {
     @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
   }
+  /* Fine dot lattice — champagne-gold on dark, soft violet on light.
+     Two offset layers give a woven, diamond-set texture rather than a grid. */
   .bg-grid-dark {
     background-image:
-      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 56px 56px;
+      radial-gradient(rgba(201,169,110,0.38) 1.1px, transparent 1.4px),
+      radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1.2px);
+    background-size: 28px 28px, 28px 28px;
+    background-position: 0 0, 14px 14px;
   }
   .bg-grid-light {
     background-image:
-      linear-gradient(rgba(109,40,217,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(109,40,217,0.06) 1px, transparent 1px);
-    background-size: 56px 56px;
+      radial-gradient(rgba(109,40,217,0.16) 1px, transparent 1.2px),
+      radial-gradient(rgba(201,169,110,0.18) 1px, transparent 1.2px);
+    background-size: 28px 28px, 28px 28px;
+    background-position: 0 0, 14px 14px;
   }
   .mask-fade-y {
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
