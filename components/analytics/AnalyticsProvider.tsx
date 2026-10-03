@@ -8,11 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface AnalyticsContextType {
   logEvent: (eventType: string, metadata?: any) => Promise<void>;
-  stampuser: string | undefined;
+  visitorId: string | undefined;
 }
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
 type UtmKey = (typeof UTM_KEYS)[number];
+const VISITOR_COOKIE = 'visitor_id';
+const LEGACY_VISITOR_COOKIE = 'stampuser';
 const UTM_SESSION_COOKIE = 'utm_session';
 const UTM_FIRST_COOKIE = 'utm_first';
 // Browsers cap cookie lifetime (~400 days), so this is effectively "as long as allowed".
@@ -35,14 +37,16 @@ export const useAnalytics = () => {
 export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
 
-  // Get or create stampuser
-  const getStampUser = useCallback(() => {
-    let user = Cookies.get('stampuser');
-    if (!user) {
-      user = uuidv4();
-      Cookies.set('stampuser', user, { expires: 365 });
+  // Get or create the visitor ID. Falls back to the legacy "stampuser" cookie so
+  // returning visitors keep their existing ID.
+  const getVisitorId = useCallback(() => {
+    let id = Cookies.get(VISITOR_COOKIE);
+    if (!id) {
+      id = Cookies.get(LEGACY_VISITOR_COOKIE) || uuidv4();
+      Cookies.set(VISITOR_COOKIE, id, { expires: 365 });
+      Cookies.remove(LEGACY_VISITOR_COOKIE);
     }
-    return user;
+    return id;
   }, []);
 
   // Cookie holds "<uuid>.<last activity ms>"; activity is bumped on every event.
@@ -96,7 +100,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const logEvent = useCallback(async (eventType: string, metadata: any = {}) => {
     try {
       const utms = getUTMs();
-      const stampuser = getStampUser();
+      const visitor_id = getVisitorId();
       const session_id = getSessionId();
       const url = typeof window !== 'undefined' ? window.location.href : '';
 
@@ -104,7 +108,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         {
           event_type: eventType.toUpperCase(),
           url,
-          stampuser,
+          visitor_id,
           session_id,
           ...utms,
           metadata,
@@ -115,7 +119,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.error('Analytics Error:', err);
     }
-  }, [getUTMs, getStampUser, getSessionId]);
+  }, [getUTMs, getVisitorId, getSessionId]);
 
   // Log "Website View" on route change
   useEffect(() => {
@@ -123,7 +127,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, [pathname, logEvent]);
 
   return (
-    <AnalyticsContext.Provider value={{ logEvent, stampuser: Cookies.get('stampuser') }}>
+    <AnalyticsContext.Provider value={{ logEvent, visitorId: Cookies.get(VISITOR_COOKIE) }}>
       {children}
     </AnalyticsContext.Provider>
   );
