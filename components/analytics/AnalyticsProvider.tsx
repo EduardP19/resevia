@@ -42,7 +42,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, []);
 
   // UTMs persist for the browser session (session cookie, no expiry). New UTMs in the URL replace them.
-  // utm_first is the first-ever utm_campaign and is never overwritten.
+  // utm_first is the first-ever utm_source + utm_campaign (e.g. "source=FB_campaign=GROUPS") and is never overwritten.
   // Read from window.location at event time rather than useSearchParams(): that hook
   // forces the whole tree under this provider to client-side rendering, which strips
   // all page content from the server-rendered HTML (bad for SEO and AI crawlers).
@@ -67,8 +67,13 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     let utm_first = Cookies.get(UTM_FIRST_COOKIE) || null;
-    if (!utm_first && utms.utm_campaign) {
-      utm_first = utms.utm_campaign;
+    if (!utm_first && (utms.utm_source || utms.utm_campaign)) {
+      utm_first = [
+        utms.utm_source && `source=${utms.utm_source}`,
+        utms.utm_campaign && `campaign=${utms.utm_campaign}`,
+      ]
+        .filter(Boolean)
+        .join('_');
       Cookies.set(UTM_FIRST_COOKIE, utm_first, { expires: UTM_FIRST_EXPIRY_DAYS });
     }
 

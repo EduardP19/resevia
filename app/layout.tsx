@@ -128,6 +128,9 @@ export default function RootLayout({
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
               y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
           })(window, document, "clarity", "script", "w0dh1pomxp");
+          // TEMP (testing): grant consent up front so Clarity records full sessions
+          // without waiting for a cookie banner. Remove once a consent banner exists.
+          window.clarity("consentv2", { ad_Storage: "granted", analytics_Storage: "granted" });
         `}
       </Script>
     </html>
