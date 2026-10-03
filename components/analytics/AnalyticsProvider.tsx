@@ -17,6 +17,10 @@ const UTM_SESSION_COOKIE = 'utm_session';
 const UTM_FIRST_COOKIE = 'utm_first';
 // Browsers cap cookie lifetime (~400 days), so this is effectively "as long as allowed".
 const UTM_FIRST_EXPIRY_DAYS = 3650;
+const SESSION_COOKIE = 'session_id';
+// A session ends when the browser closes (session cookie) or after 30 min of inactivity,
+// since mobile browsers often keep session cookies alive for days.
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
@@ -39,6 +43,15 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       Cookies.set('stampuser', user, { expires: 365 });
     }
     return user;
+  }, []);
+
+  // Cookie holds "<uuid>.<last activity ms>"; activity is bumped on every event.
+  const getSessionId = useCallback(() => {
+    const now = Date.now();
+    const [id, last] = (Cookies.get(SESSION_COOKIE) || '').split('.');
+    const sessionId = id && now - Number(last) < SESSION_TIMEOUT_MS ? id : uuidv4();
+    Cookies.set(SESSION_COOKIE, `${sessionId}.${now}`);
+    return sessionId;
   }, []);
 
   // UTMs persist for the browser session (session cookie, no expiry). New UTMs in the URL replace them.
@@ -84,6 +97,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       const utms = getUTMs();
       const stampuser = getStampUser();
+      const session_id = getSessionId();
       const url = typeof window !== 'undefined' ? window.location.href : '';
 
       const { error } = await supabase.from('logs').insert([
@@ -91,6 +105,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           event_type: eventType.toUpperCase(),
           url,
           stampuser,
+          session_id,
           ...utms,
           metadata,
         },
@@ -100,7 +115,7 @@ export const AnalyticsProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch (err) {
       console.error('Analytics Error:', err);
     }
-  }, [getUTMs, getStampUser]);
+  }, [getUTMs, getStampUser, getSessionId]);
 
   // Log "Website View" on route change
   useEffect(() => {

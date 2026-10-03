@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS public.logs (
     event_type TEXT NOT NULL,
     url TEXT,
     stampuser TEXT,
+    session_id TEXT,
     utm_source TEXT,
     utm_medium TEXT,
     utm_campaign TEXT,
@@ -348,6 +349,7 @@ ALTER TABLE public.scheduled_messages ENABLE ROW LEVEL SECURITY;
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_logs_event_type ON public.logs(event_type);
 CREATE INDEX IF NOT EXISTS idx_logs_stampuser ON public.logs(stampuser);
+CREATE INDEX IF NOT EXISTS idx_logs_session_id ON public.logs(session_id);
 CREATE INDEX IF NOT EXISTS idx_waitlist_email ON public.waitlist(email);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_status_published_at ON public.blog_posts(status, published_at DESC);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON public.blog_posts(slug);
