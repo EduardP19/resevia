@@ -7,7 +7,7 @@ import { getPublishedPosts, coverImageFor } from '@/lib/blog';
 
 export const revalidate = 3600; // ISR — refresh hourly
 
-const SITE_URL = 'https://resevia.co.uk';
+const SITE_URL = 'https://www.resevia.co.uk';
 
 export const metadata: Metadata = {
   title: 'Resevia Blog — AI Reception for Salons & Clinics',

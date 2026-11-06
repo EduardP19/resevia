@@ -3,7 +3,7 @@ import { getPublishedPosts } from '@/lib/blog';
 import { SOLUTIONS } from '@/content/solutions';
 import { INDUSTRY_PAGES } from '@/content/industryPages';
 
-const SITE_URL = 'https://resevia.co.uk';
+const SITE_URL = 'https://www.resevia.co.uk';
 
 export const revalidate = 3600; // refresh sitemap hourly
 

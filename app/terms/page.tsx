@@ -5,8 +5,8 @@ import { Footer } from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'Terms and Conditions | Resevia',
   description: 'The terms and conditions for using Resevia services.',
-  alternates: { canonical: 'https://resevia.co.uk/terms' },
-  openGraph: { title: 'Terms and Conditions | Resevia', description: 'The terms and conditions for using Resevia services.', url: 'https://resevia.co.uk/terms', type: 'website' },
+  alternates: { canonical: 'https://www.resevia.co.uk/terms' },
+  openGraph: { title: 'Terms and Conditions | Resevia', description: 'The terms and conditions for using Resevia services.', url: 'https://www.resevia.co.uk/terms', type: 'website' },
 };
 
 

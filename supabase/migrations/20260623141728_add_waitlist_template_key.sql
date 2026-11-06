@@ -139,7 +139,7 @@ The Resevia Team',
                 <p style="margin: 8px 0 0 0; color: #6B7280; font-size: 12px;">London, United Kingdom</p>
                 <p style="margin: 12px 0 0 0; color: #6B7280; font-size: 12px;">
                   You''re receiving this because you reserved a founding spot at
-                  <a href="https://resevia.co.uk" style="color: #C9A96E; text-decoration: none;">resevia.co.uk</a>.
+                  <a href="https://www.resevia.co.uk" style="color: #C9A96E; text-decoration: none;">resevia.co.uk</a>.
                 </p>
               </td>
             </tr>

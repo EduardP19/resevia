@@ -11,8 +11,8 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
 export const metadata: Metadata = {
   title: 'How it works — Resevia AI Receptionist',
   description: 'From setup to live in under 48 hours. See how Resevia answers calls, replies on SMS and WhatsApp, and books appointments for you.',
-  alternates: { canonical: 'https://resevia.co.uk/how-it-works' },
-  openGraph: { title: 'How it works — Resevia AI Receptionist', description: 'From setup to live in under 48 hours. See how Resevia answers calls, replies on SMS and WhatsApp, and books appointments for you.', url: 'https://resevia.co.uk/how-it-works', type: 'website' },
+  alternates: { canonical: 'https://www.resevia.co.uk/how-it-works' },
+  openGraph: { title: 'How it works — Resevia AI Receptionist', description: 'From setup to live in under 48 hours. See how Resevia answers calls, replies on SMS and WhatsApp, and books appointments for you.', url: 'https://www.resevia.co.uk/how-it-works', type: 'website' },
 };
 
 const FAQS = [

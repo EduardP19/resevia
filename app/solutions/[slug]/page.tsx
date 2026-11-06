@@ -11,7 +11,7 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
 import { JsonLd } from '@/components/solutions/SolutionJsonLd';
 import { SOLUTIONS, getSolution } from '@/content/solutions';
 
-const SITE_URL = 'https://resevia.co.uk';
+const SITE_URL = 'https://www.resevia.co.uk';
 
 export function generateStaticParams() {
   return SOLUTIONS.map((s) => ({ slug: s.slug }));

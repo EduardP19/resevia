@@ -9,8 +9,8 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
 export const metadata: Metadata = {
   title: 'Pricing — Resevia AI Receptionist',
   description: 'Simple, transparent pricing for your AI receptionist. Essentials from £69/month, Growth with AI voice from £179/month. Founding offer: free setup + first month free.',
-  alternates: { canonical: 'https://resevia.co.uk/pricing' },
-  openGraph: { title: 'Pricing — Resevia AI Receptionist', description: 'Simple, transparent pricing for your AI receptionist. Essentials from £69/month, Growth with AI voice from £179/month. Founding offer: free setup + first month free.', url: 'https://resevia.co.uk/pricing', type: 'website' },
+  alternates: { canonical: 'https://www.resevia.co.uk/pricing' },
+  openGraph: { title: 'Pricing — Resevia AI Receptionist', description: 'Simple, transparent pricing for your AI receptionist. Essentials from £69/month, Growth with AI voice from £179/month. Founding offer: free setup + first month free.', url: 'https://www.resevia.co.uk/pricing', type: 'website' },
 };
 
 const FAQS = [

@@ -10,13 +10,13 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-display' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://resevia.co.uk"),
+  metadataBase: new URL("https://www.resevia.co.uk"),
   title: "Resevia — The AI Receptionist for Salons, Clinics & Booking Businesses",
   description: "Every call answered. Every booking captured. Resevia answers calls, replies on SMS and WhatsApp, and books appointments 24/7 for salons, clinics and every business that runs on bookings.",
   openGraph: {
     title: "Resevia — Every call answered. Every booking captured.",
     description: "The AI receptionist for salons, clinics and every business that runs on bookings. Test the agent live.",
-    url: "https://resevia.co.uk",
+    url: "https://www.resevia.co.uk",
     siteName: "Resevia",
     locale: "en_GB",
     type: "website",
@@ -34,7 +34,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteUrl = "https://resevia.co.uk";
+  const siteUrl = "https://www.resevia.co.uk";
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [

@@ -7,7 +7,7 @@ import { FinalCTA } from '@/components/sections/FinalCTA';
 import { JsonLd } from '@/components/solutions/SolutionJsonLd';
 import { SOLUTIONS } from '@/content/solutions';
 
-const SITE_URL = 'https://resevia.co.uk';
+const SITE_URL = 'https://www.resevia.co.uk';
 
 export const metadata: Metadata = {
   title: 'AI Receptionist, WhatsApp Booking & Automation | Resevia',

@@ -12,8 +12,8 @@ import { industryPageHref } from '@/content/industryPages';
 export const metadata: Metadata = {
   title: 'Industries — Resevia AI Receptionist',
   description: 'An AI receptionist for hair and beauty salons, aesthetic and private clinics, dental practices, physio, vets, gyms and every business that runs on bookings.',
-  alternates: { canonical: 'https://resevia.co.uk/industries' },
-  openGraph: { title: 'Industries — Resevia AI Receptionist', description: 'An AI receptionist for hair and beauty salons, aesthetic and private clinics, dental practices, physio, vets, gyms and every business that runs on bookings.', url: 'https://resevia.co.uk/industries', type: 'website' },
+  alternates: { canonical: 'https://www.resevia.co.uk/industries' },
+  openGraph: { title: 'Industries — Resevia AI Receptionist', description: 'An AI receptionist for hair and beauty salons, aesthetic and private clinics, dental practices, physio, vets, gyms and every business that runs on bookings.', url: 'https://www.resevia.co.uk/industries', type: 'website' },
 };
 
 export default function IndustriesPage() {
