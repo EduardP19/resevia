@@ -2,7 +2,7 @@ import { SOLUTIONS } from '@/content/solutions';
 import { INDUSTRY_PAGES } from '@/content/industryPages';
 import { INDUSTRIES } from '@/lib/industries';
 
-const SITE_URL = 'https://www.resevia.co.uk';
+const SITE_URL = 'https://resevia.co.uk';
 
 export const dynamic = 'force-static';
 

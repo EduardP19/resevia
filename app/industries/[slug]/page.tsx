@@ -12,7 +12,7 @@ import { INDUSTRIES } from '@/lib/industries';
 import { INDUSTRY_PAGES, getIndustryPage } from '@/content/industryPages';
 import { getSolution } from '@/content/solutions';
 
-const SITE_URL = 'https://www.resevia.co.uk';
+const SITE_URL = 'https://resevia.co.uk';
 
 export function generateStaticParams() {
   return INDUSTRY_PAGES.map((p) => ({ slug: p.slug }));

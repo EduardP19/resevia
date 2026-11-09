@@ -451,7 +451,7 @@ export default function DashboardPostizPage() {
                 setForm((prev) => ({ ...prev, comment: event.target.value }))
               }
               className="w-full rounded-md border border-slate-300 p-3 text-sm"
-              placeholder="https://www.resevia.co.uk/"
+              placeholder="https://resevia.co.uk/"
             />
           </div>
 
